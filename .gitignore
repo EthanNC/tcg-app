@@ -1,0 +1,9 @@
+node_modules
+
+# sst
+.sst
+
+# temporary files
+.#*
+
+.env
