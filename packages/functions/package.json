@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "@tcg-app/core": "*"
+    "@tcg-app/core": "*",
+    "hono": "^4.4.9"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.137"

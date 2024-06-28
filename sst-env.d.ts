@@ -8,6 +8,14 @@ declare module "sst" {
       type: "sst.aws.Function"
       url: string
     }
+    Database: {
+      database: string
+      host: string
+      password: string
+      port: number
+      type: "supabase.index/project.Project"
+      user: string
+    }
     StaticSite: {
       type: "sst.aws.StaticSite"
       url: string
