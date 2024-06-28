@@ -1,10 +1,21 @@
 {
   "name": "@tcg-app/core",
   "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "db": "sst shell drizzle-kit",
+    "db:studio": "sst shell drizzle-kit studio",
+    "db:migrate": "sst shell drizzle-kit migrate"
+  },
   "exports": {
     "./*": [
       "./src/*/index.ts",
       "./src/*.ts"
     ]
+  },
+  "dependencies": {
+    "drizzle-kit": "^0.22.7",
+    "drizzle-orm": "^0.31.2",
+    "postgres": "^3.4.4"
   }
 }
