@@ -1,8 +1,9 @@
 {
-  "name": "@aws-monorepo/functions",
+  "name": "@tcg-app/functions",
   "version": "0.0.0",
+  "type": "module",
   "dependencies": {
-    "@aws-monorepo/core": "*"
+    "@tcg-app/core": "*"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.137"

@@ -1,6 +1,6 @@
 import { Resource } from "sst";
 import { Handler } from "aws-lambda";
-import { Example } from "@aws-monorepo/core/example";
+import { Example } from "@tcg-app/core/example";
 
 export const handler: Handler = async (event) => {
   return {

@@ -1,5 +1,5 @@
 {
-  "name": "@aws-monorepo/frontend",
+  "name": "@tcg-app/frontend",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

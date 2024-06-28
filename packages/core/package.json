@@ -1,5 +1,5 @@
 {
-  "name": "@aws-monorepo/core",
+  "name": "@tcg-app/core",
   "version": "0.0.0",
   "exports": {
     "./*": [

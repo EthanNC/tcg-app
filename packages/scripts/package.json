@@ -1,8 +1,9 @@
 {
-  "name": "@aws-monorepo/scripts",
+  "name": "@tcg-app/scripts",
   "version": "0.0.0",
+  "type": "module",
   "dependencies": {
-    "@aws-monorepo/core": "*"
+    "@tcg-app/core": "*"
   },
   "scripts": {
     "shell": "sst shell tsx"

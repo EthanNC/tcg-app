@@ -54,7 +54,7 @@
  *   This will allow us to import the `Example` module by doing:
  *
  *   ```ts
- *   import { Example } from "@aws-monorepo/core/example";
+ *   import { Example } from "@tcg-app/core/example";
  *
  *   Example.hello();
  *   ```

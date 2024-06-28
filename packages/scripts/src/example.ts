@@ -1,4 +1,4 @@
 import { Resource } from "sst";
-import { Example } from "@aws-monorepo/core/example";
+import { Example } from "@tcg-app/core/example";
 
-console.log(`${Example.hello()} Linked to ${Resource.Database.name}.`);
+// console.log(`${Example.hello()} Linked to ${Resource.Database.name}.`);
