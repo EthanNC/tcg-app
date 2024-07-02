@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@tcg-app": path.resolve(__dirname, "../functions/src"),
     },
   },
   server: {
