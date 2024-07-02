@@ -21,5 +21,5 @@ const app = new Hono()
     const card = await byId(cardId);
     return c.json(card);
   });
-
+export type ApiRoutes = typeof app;
 export const handler = handle(app);

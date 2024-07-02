@@ -11,11 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as RandomImport } from './routes/random'
 import { Route as AboutImport } from './routes/about'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
+import { Route as CardsCardIdImport } from './routes/cards/$cardId'
 
 // Create/Update Routes
+
+const RandomRoute = RandomImport.update({
+  path: '/random',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AboutRoute = AboutImport.update({
   path: '/about',
@@ -29,6 +36,11 @@ const AuthenticatedRoute = AuthenticatedImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const CardsCardIdRoute = CardsCardIdImport.update({
+  path: '/cards/$cardId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -48,6 +60,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/random': {
+      preLoaderRoute: typeof RandomImport
+      parentRoute: typeof rootRoute
+    }
+    '/cards/$cardId': {
+      preLoaderRoute: typeof CardsCardIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -57,6 +77,8 @@ export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AuthenticatedRoute,
   AboutRoute,
+  RandomRoute,
+  CardsCardIdRoute,
 ])
 
 /* prettier-ignore-end */
