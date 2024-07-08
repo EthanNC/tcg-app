@@ -23,3 +23,14 @@ export const getRandomCardId = async () => {
   );
   return response[0]?.unique_id;
 };
+
+export const searchByName = zod(Schema.shape.name, async (name) => {
+  const searchResults = await db
+    .select()
+    .from(cards)
+    .where(
+      sql`to_tsvector('english', ${cards.name}) @@ to_tsquery('english', ${name})`
+    );
+
+  return searchResults;
+});
