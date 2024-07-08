@@ -5,7 +5,8 @@
   "scripts": {
     "db": "sst shell drizzle-kit",
     "db:studio": "sst shell drizzle-kit studio",
-    "db:migrate": "sst shell drizzle-kit migrate"
+    "db:migrate": "sst shell drizzle-kit migrate",
+    "db:generate": "sst shell drizzle-kit generate"
   },
   "exports": {
     "./*": [

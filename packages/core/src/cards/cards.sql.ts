@@ -1,5 +1,7 @@
+import { sql } from "drizzle-orm";
 import {
   boolean,
+  index,
   pgTable,
   timestamp,
   unique,
@@ -88,6 +90,10 @@ export const cards = pgTable(
       cards_name_pitch_key: unique("cards_name_pitch_key").on(
         table.name,
         table.pitch
+      ),
+      nameSearchIndex: index("name_search_index").using(
+        "gin",
+        sql`to_tsvector('english', ${table.name})`
       ),
     };
   }
