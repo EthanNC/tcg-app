@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { type ApiRoutes } from "@tcg-app/functions/api/index.ts";
-import { hc } from "hono/client";
+import { InferResponseType, hc } from "hono/client";
 
 const client = hc<ApiRoutes>(import.meta.env.VITE_API_URL);
 
@@ -19,6 +19,9 @@ export const getCardQueryOptions = (id: string) =>
     queryFn: () => getCard(id),
     staleTime: 1000 * 60 * 5,
   });
+
+const $get = client.cards[":id"].$get;
+export type GetCardResponse = InferResponseType<typeof $get>;
 
 export async function getRandomCard() {
   const res = await client.random.$get();

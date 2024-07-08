@@ -1,3 +1,4 @@
+import CardDetails from "@/components/CardDetails";
 import { getRandomCardQueryOptions } from "@/lib/api";
 import { queryClient } from "@/main";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -16,5 +17,5 @@ export default function RandomCard() {
   } = useSuspenseQuery(getRandomCardQueryOptions);
 
   console.log({ isPending, error, card });
-  return <div>{JSON.stringify(card, null, 2)}</div>;
+  return <CardDetails cardData={card} />;
 }
