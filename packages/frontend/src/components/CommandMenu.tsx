@@ -8,12 +8,18 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
+import { searchCardQueryOptions } from "@/lib/api";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { PersonStanding } from "lucide-react";
-import { useEffect } from "react";
-
+import { Forward, PersonStanding } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDebounce } from "@uidotdev/usehooks";
+import { useQuery } from "@tanstack/react-query";
 export function CommandMenu() {
-  const navigate = useNavigate({ from: "/posts/$postId" });
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const [searchParams] = useDebounce([searchTerm], 1000);
+  const { data } = useQuery(searchCardQueryOptions(searchParams));
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -25,12 +31,26 @@ export function CommandMenu() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, [navigate]);
-
+  console.log({ data });
   return (
-    <Command className="mt-10 rounded-lg border shadow-md">
-      <CommandInput placeholder="Search for a card..." />
+    <Command shouldFilter={false} className="mt-10 rounded-lg border shadow-md">
+      <CommandInput
+        value={searchTerm}
+        onValueChange={setSearchTerm}
+        placeholder="Search for a card..."
+      />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading="Suggestions">
+          {data?.map((card) => (
+            <CommandItem key={card.unique_id}>
+              <Forward className="mr-2 h-4 w-4" />
+              <Link to="/cards/$cardId" params={{ cardId: card.unique_id }}>
+                <span>{card.name}</span>
+              </Link>
+            </CommandItem>
+          ))}
+        </CommandGroup>
         <CommandSeparator />
         <CommandGroup heading="Saved Searches">
           <CommandItem>
