@@ -19,5 +19,17 @@ export default function CardComponent() {
 
   console.log({ isPending, error, card });
 
-  return <div>{`Hello /cards/${cardId}!`}</div>;
+  return (
+    <div className="grid grid-cols-3 gap-4">
+      <div className="col-span-3">
+        <h1 className="text-3xl font-bold">{card?.cards.name}</h1>
+      </div>
+      <div className="col-span-1">
+        <img src={card?.card_printings.image_url} alt={card?.cards.name} />
+      </div>
+      <div className="col-span-2">
+        <p>{card?.cards.functional_text}</p>
+      </div>
+    </div>
+  );
 }
