@@ -3,6 +3,7 @@ import { db } from "../drizzle";
 import { cards } from "./cards.sql";
 import { eq, sql } from "drizzle-orm";
 import { zod } from "../utils/zod";
+import { card_printings } from "./card-printings.sql";
 
 const Schema = createSelectSchema(cards, {
   unique_id: (z) => z.unique_id,
@@ -12,6 +13,10 @@ export const byId = zod(Schema.shape.unique_id, async (unique_id) => {
   const card = await db
     .select()
     .from(cards)
+    .innerJoin(
+      card_printings,
+      eq(cards.unique_id, card_printings.card_unique_id)
+    )
     .where(eq(cards.unique_id, unique_id))
     .execute();
   return card[0];
