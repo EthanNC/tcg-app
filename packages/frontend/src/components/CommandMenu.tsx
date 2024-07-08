@@ -14,6 +14,7 @@ import { Forward, PersonStanding } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useQuery } from "@tanstack/react-query";
+
 export function CommandMenu() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -45,7 +46,11 @@ export function CommandMenu() {
           {data?.map((card) => (
             <CommandItem key={card.unique_id}>
               <Forward className="mr-2 h-4 w-4" />
-              <Link to="/cards/$cardId" params={{ cardId: card.unique_id }}>
+              <Link
+                to="/cards/$cardId"
+                params={{ cardId: card.unique_id }}
+                from={`/search?name=${card.name}`}
+              >
                 <span>{card.name}</span>
               </Link>
             </CommandItem>
