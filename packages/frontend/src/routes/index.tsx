@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { CommandMenu } from "@/components/CommandMenu";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -7,8 +7,8 @@ export const Route = createFileRoute("/")({
 
 export default function Index() {
   return (
-    <Button asChild>
-      <Link to="/random">Random Card</Link>
-    </Button>
+    <>
+      <CommandMenu />
+    </>
   );
 }
