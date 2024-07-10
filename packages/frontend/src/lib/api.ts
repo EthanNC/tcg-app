@@ -35,7 +35,6 @@ export async function getRandomCard() {
 export const getRandomCardQueryOptions = queryOptions({
   queryKey: ["random-card"],
   queryFn: getRandomCard,
-  staleTime: 1000 * 60 * 5,
 });
 
 export async function searchCard(name: string) {
