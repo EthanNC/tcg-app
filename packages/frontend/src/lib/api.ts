@@ -54,6 +54,8 @@ export const searchCardQueryOptions = (name: string) =>
     queryKey: ["search-card", name],
     queryFn: () => searchCard(name),
     refetchOnWindowFocus: false,
-    staleTime: 1000,
+    // 30 minutes
+    staleTime: 1000 * 60 * 30,
+    gcTime: 1000 * 60 * 30,
     enabled: name.length > 1,
   });

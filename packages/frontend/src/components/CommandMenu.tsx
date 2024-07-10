@@ -1,6 +1,5 @@
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -9,18 +8,26 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { searchCardQueryOptions } from "@/lib/api";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { Forward, PersonStanding } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useQuery } from "@tanstack/react-query";
-
+import SearchResultSkeleton from "./SearchSkeleton";
+import { Command as CommandPrimitive } from "cmdk";
 export function CommandMenu() {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
+  //get ?name query param from header
+  const looseSearch = useSearch({ strict: false }) as {
+    name?: string | undefined;
+  };
+  const [searchTerm, setSearchTerm] = useState(looseSearch.name || "");
 
   const [searchParams] = useDebounce([searchTerm], 1000);
-  const { data } = useQuery(searchCardQueryOptions(searchParams));
+
+  const { data, isLoading, isError } = useQuery(
+    searchCardQueryOptions(searchParams)
+  );
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -32,30 +39,48 @@ export function CommandMenu() {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, [navigate]);
-  console.log({ data });
+
+  const handleSearch = useCallback((query: string) => {
+    setSearchTerm(query);
+  }, []);
+
+  useEffect(() => {
+    if (searchParams) {
+      navigate({ to: "/", search: { name: searchParams } });
+    }
+  }, [searchParams, navigate]);
+
   return (
     <Command shouldFilter={false} className="mt-10 rounded-lg border shadow-md">
       <CommandInput
         value={searchTerm}
-        onValueChange={setSearchTerm}
+        onValueChange={handleSearch}
         placeholder="Search for a card..."
       />
+
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Suggestions">
-          {data?.map((card) => (
-            <CommandItem key={card.unique_id}>
-              <Forward className="mr-2 h-4 w-4" />
-              <Link
-                to="/cards/$cardId"
-                params={{ cardId: card.unique_id }}
-                from={`/search?name=${card.name}`}
-              >
-                <span>{card.name}</span>
-              </Link>
-            </CommandItem>
-          ))}
-        </CommandGroup>
+        {(data?.length === 0 || isError) && (
+          <CommandPrimitive.Loading className="text-center py-2">
+            no cards found
+          </CommandPrimitive.Loading>
+        )}
+        {
+          <CommandGroup>
+            {isLoading && <SearchResultSkeleton />}
+            {data?.map((card) => (
+              <CommandItem key={card.unique_id} value={card.name + card.pitch}>
+                <Forward className="mr-2 h-4 w-4" />
+                <Link
+                  to="/cards/$cardId"
+                  params={{ cardId: card.unique_id }}
+                  from={`/search?name=${card.name}`}
+                >
+                  <span>{card.name}</span>
+                </Link>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        }
         <CommandSeparator />
         <CommandGroup heading="Saved Searches">
           <CommandItem>
