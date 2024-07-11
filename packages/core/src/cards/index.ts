@@ -33,7 +33,12 @@ export const getRandomCardId = async () => {
 export const searchByName = zod(Schema.shape.name, async (name) => {
   const searchQuery = prepareSearchQueryForTsQuery(name);
   const searchResults = await db
-    .select()
+    .select({
+      // Select only the columns we need
+      unique_id: cards.unique_id,
+      name: cards.name,
+      pitch: cards.pitch,
+    })
     .from(cards)
     .where(sql`${cards.cardSearch} @@ to_tsquery('english', ${searchQuery})`);
 
