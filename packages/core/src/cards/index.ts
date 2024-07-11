@@ -4,6 +4,7 @@ import { cards } from "./cards.sql";
 import { eq, sql } from "drizzle-orm";
 import { zod } from "../utils/zod";
 import { card_printings } from "./card-printings.sql";
+import { prepareSearchQueryForTsQuery } from "../utils/search";
 
 const Schema = createSelectSchema(cards, {
   unique_id: (z) => z.unique_id,
@@ -30,12 +31,11 @@ export const getRandomCardId = async () => {
 };
 
 export const searchByName = zod(Schema.shape.name, async (name) => {
+  const searchQuery = prepareSearchQueryForTsQuery(name);
   const searchResults = await db
     .select()
     .from(cards)
-    .where(
-      sql`to_tsvector('english', ${cards.name}) @@ to_tsquery('english', ${name})`
-    );
+    .where(sql`${cards.cardSearch} @@ to_tsquery('english', ${searchQuery})`);
 
   return searchResults;
 });

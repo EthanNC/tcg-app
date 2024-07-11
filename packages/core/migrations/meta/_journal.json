@@ -22,6 +22,13 @@
       "when": 1720400094910,
       "tag": "0002_flawless_shriek",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1720717581446,
+      "tag": "0003_young_rocket_racer",
+      "breakpoints": true
     }
   ]
 }
