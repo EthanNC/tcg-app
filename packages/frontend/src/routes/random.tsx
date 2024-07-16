@@ -1,5 +1,5 @@
 import CardDetails from "@/components/CardDetails";
-import { getRandomCardQueryOptions } from "@/lib/api";
+import { getRandomCardQueryOptions } from "@/lib/api/cards";
 import { queryClient } from "@/main";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";

@@ -7,7 +7,7 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
-import { searchCardQueryOptions } from "@/lib/api";
+import { searchCardQueryOptions } from "@/lib/api/cards";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { Forward, PersonStanding } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";

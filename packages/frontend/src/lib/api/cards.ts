@@ -1,8 +1,8 @@
 import { queryOptions } from "@tanstack/react-query";
-import { type ApiRoutes } from "@tcg-app/functions/api/index.ts";
+import { type AppType } from "@tcg-app/functions/api";
 import { InferResponseType, hc } from "hono/client";
 
-const client = hc<ApiRoutes>(import.meta.env.VITE_API_URL);
+const client = hc<AppType>(import.meta.env.VITE_API_URL);
 
 export async function getCard(id: string) {
   const res = await client.cards[":id"].$get({ param: { id } });
@@ -24,7 +24,7 @@ const $get = client.cards[":id"].$get;
 export type GetCardResponse = InferResponseType<typeof $get>;
 
 export async function getRandomCard() {
-  const res = await client.random.$get();
+  const res = await client.cards.random.$get();
   if (!res.ok) {
     throw new Error("server error");
   }

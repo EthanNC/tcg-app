@@ -15,5 +15,6 @@ const app = new Hono()
   .route("/cards", cards)
   .route("/sets", sets);
 
-export type ApiRoutes = typeof app;
+export type AppType = typeof app;
+
 export const handler = handle(app);
