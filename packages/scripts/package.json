@@ -3,12 +3,15 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "@tcg-app/core": "*"
+    "@tcg-app/core": "*",
+    "bun": "^1.1.20"
   },
   "scripts": {
-    "shell": "sst shell tsx"
+    "shell": "sst shell tsx",
+    "pg": "sst shell bun src/psql.ts"
   },
   "devDependencies": {
+    "@types/bun": "^1.1.6",
     "tsx": "^4.7.2"
   }
 }
