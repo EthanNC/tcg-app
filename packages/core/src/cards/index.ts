@@ -40,7 +40,7 @@ export const searchByName = zod(Schema.shape.name, async (name) => {
       pitch: cards.pitch,
     })
     .from(cards)
-    .where(sql`${cards.cardSearch} @@ to_tsquery('english', ${searchQuery})`);
+    .where(sql`${cards.name} @@ to_tsquery('english', ${searchQuery})`);
 
   return searchResults;
 });

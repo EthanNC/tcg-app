@@ -1,7 +1,6 @@
-import { SQL, sql } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import {
   boolean,
-  customType,
   index,
   pgTable,
   timestamp,
@@ -9,23 +8,12 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-//TODO: This is temp and will be native to drizzle-orm soonTM
-const tsVector = customType<{ data: string }>({
-  dataType() {
-    return "tsvector";
-  },
-});
-
 export const cards = pgTable(
   "cards",
   {
     unique_id: varchar("unique_id", { length: 21 }).primaryKey().notNull(),
     name: varchar("name", { length: 255 }).notNull(),
     pitch: varchar("pitch", { length: 10 }).notNull(),
-    cardSearch: tsVector("card_search").generatedAlwaysAs(
-      (): SQL =>
-        sql`to_tsvector('english', ${cards.name}) || to_tsvector('english', ${cards.pitch})`
-    ),
     cost: varchar("cost", { length: 10 }).notNull(),
     power: varchar("power", { length: 10 }).notNull(),
     defense: varchar("defense", { length: 10 }).notNull(),
@@ -105,7 +93,7 @@ export const cards = pgTable(
       ),
       nameSearchIndex: index("name_search_index").using(
         "gin",
-        table.cardSearch
+        sql`to_tsvector('english', ${table.name})`
       ),
     };
   }
