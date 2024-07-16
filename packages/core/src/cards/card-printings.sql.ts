@@ -1,6 +1,6 @@
 import { pgTable, unique, varchar } from "drizzle-orm/pg-core";
-import { set_printings } from "../drizzle/schema.sql";
 import { cards } from "./cards.sql";
+import { set_printings } from "../sets/set-printings.sql";
 
 export const card_printings = pgTable(
   "card_printings",

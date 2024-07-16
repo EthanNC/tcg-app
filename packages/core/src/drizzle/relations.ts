@@ -1,7 +1,5 @@
 import { relations } from "drizzle-orm/relations";
 import {
-  sets,
-  set_printings,
   card_face_associations,
   card_references,
   abilities,
@@ -14,6 +12,8 @@ import {
 } from "./schema.sql";
 import { cards } from "../cards/cards.sql";
 import { card_printings } from "../cards/card-printings.sql";
+import { sets } from "../sets/sets.sql";
+import { set_printings } from "../sets/set-printings.sql";
 
 export const set_printingsRelations = relations(
   set_printings,
