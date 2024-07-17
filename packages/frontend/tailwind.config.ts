@@ -67,6 +67,20 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        loader: {
+          "0%, 33%": {
+            inset: "-10px",
+            transform: "rotate(0deg)",
+          },
+          "66%": {
+            inset: "-10px",
+            transform: "rotate(90deg)",
+          },
+          "100%": {
+            inset: "0",
+            transform: "rotate(90deg)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",

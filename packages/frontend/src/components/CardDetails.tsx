@@ -1,4 +1,4 @@
-import { GetCardResponse } from "@/lib/api";
+import { GetCardResponse } from "@/lib/api/cards";
 import React from "react";
 import AttackSymbol from "@/assets/img/symbols/symbol-attack.png";
 import DefenceSymbol from "@/assets/img/symbols/symbol-defence.png";
@@ -7,6 +7,7 @@ import ChiSymbol from "@/assets/img/symbols/symbol-chi.png";
 import HealthSymbol from "@/assets/img/symbols/symbol-health.png";
 
 import ReactMarkdown, { Components } from "react-markdown";
+import { Link } from "@tanstack/react-router";
 
 const CustomNotation = ({ notation }: { notation: string }) => {
   switch (notation) {
@@ -86,7 +87,16 @@ export default function CardDetails({
   return (
     <div className="grid grid-cols-3 gap-4">
       <div className="col-span-3">
-        <h1 className="text-3xl font-bold">{cardData?.cards.name}</h1>
+        <div className="flex items-baseline gap-2">
+          <h1 className="text-3xl font-bold">{cardData?.cards.name}</h1>
+          <Link
+            to="/sets/$setId"
+            params={{ setId: cardData.card_printings.set_id }}
+            className="text-sm"
+          >
+            {cardData?.card_printings.set_id}
+          </Link>
+        </div>
       </div>
       <div className="col-span-1">
         <img

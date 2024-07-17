@@ -1,17 +1,18 @@
 import CardDetails from "@/components/CardDetails";
+import Spinner from "@/components/Spinner";
 import { getCardQueryOptions } from "@/lib/api/cards";
-import { queryClient } from "@/main";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/cards/$cardId")({
-  loader: ({ params: { cardId } }) =>
-    queryClient.ensureQueryData(getCardQueryOptions(cardId)),
+  loader: ({ params: { cardId }, context }) =>
+    context.queryClient.ensureQueryData(getCardQueryOptions(cardId)),
+  pendingComponent: Spinner,
   component: CardComponent,
 });
 
 export default function CardComponent() {
-  const cardId = Route.useParams().cardId;
+  const { cardId } = Route.useParams();
   const {
     isPending,
     error,

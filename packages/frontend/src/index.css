@@ -74,3 +74,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+
+.loader {
+  @apply w-14 h-14 text-[#f03355] relative bg-[100%_50%] bg-no-repeat before:content-[''] before:absolute before:animate-[loader_1.5s_infinite_cubic-bezier(0.3,1,0,1)] before:inset-0 animate-pulse;
+  background: conic-gradient(from 134deg at top, currentColor 92deg, #0000 0)
+      top,
+    conic-gradient(from -46deg at bottom, currentColor 92deg, #0000 0) bottom;
+}
+.loader:before {
+  --g: currentColor 14.5px, #0000 0 calc(100% - 14.5px), currentColor 0;
+  background: linear-gradient(45deg, var(--g)),
+    linear-gradient(-45deg, var(--g));
+}
