@@ -1,7 +1,7 @@
 import { createSelectSchema } from "drizzle-zod";
 import { db } from "../drizzle";
 import { cards } from "./cards.sql";
-import { eq, sql } from "drizzle-orm";
+import { arrayContains, eq, sql } from "drizzle-orm";
 import { zod } from "../utils/zod";
 import { card_printings } from "./card-printings.sql";
 import { prepareSearchQueryForTsQuery } from "../utils/search";
@@ -30,6 +30,18 @@ export const getRandomCardId = async () => {
   return response[0]?.unique_id;
 };
 
+export const getRandomHeroCardId = async () => {
+  const response = await db
+    .select({ unique_id: cards.unique_id })
+    .from(cards)
+    .where(arrayContains(cards.types, ["Hero"]))
+    .offset(Math.floor(Math.random() * 100))
+    .limit(1)
+    .execute();
+
+  return response[0]?.unique_id;
+};
+
 export const searchByName = zod(Schema.shape.name, async (name) => {
   const searchQuery = prepareSearchQueryForTsQuery(name);
   const searchResults = await db
@@ -40,7 +52,9 @@ export const searchByName = zod(Schema.shape.name, async (name) => {
       pitch: cards.pitch,
     })
     .from(cards)
-    .where(sql`${cards.name} @@ to_tsquery('english', ${searchQuery})`);
+    .where(
+      sql`${cards.name} @@ websearch_to_tsquery('english', ${searchQuery})`
+    );
 
   return searchResults;
 });

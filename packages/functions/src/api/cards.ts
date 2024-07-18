@@ -1,4 +1,9 @@
-import { byId, getRandomCardId, searchByName } from "@tcg-app/core/cards";
+import {
+  byId,
+  getRandomCardId,
+  getRandomHeroCardId,
+  searchByName,
+} from "@tcg-app/core/cards";
 import { Hono } from "hono";
 
 const app = new Hono()
@@ -7,6 +12,11 @@ const app = new Hono()
     if (!name) return c.json([]);
     const cards = await searchByName(name);
     return c.json(cards);
+  })
+  .get("/random/hero", async (c) => {
+    const cardId = await getRandomHeroCardId();
+    const card = await byId(cardId);
+    return c.json(card);
   })
   .get("/random", async (c) => {
     const cardId = await getRandomCardId();
