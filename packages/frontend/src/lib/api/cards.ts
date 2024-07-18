@@ -58,3 +58,17 @@ export const searchCardQueryOptions = (name: string) =>
     gcTime: 1000 * 60 * 30,
     enabled: name.length > 1,
   });
+
+export const getRandomHeroCard = async () => {
+  const res = await client.cards.random.hero.$get();
+  if (!res.ok) {
+    throw new Error("server error");
+  }
+  const data = await res.json();
+  return data;
+};
+
+export const getRandomHeroCardQueryOptions = queryOptions({
+  queryKey: ["random-hero-card"],
+  queryFn: () => getRandomHeroCard(),
+});

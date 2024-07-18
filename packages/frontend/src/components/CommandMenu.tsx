@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/command";
 import { searchCardQueryOptions } from "@/lib/api/cards";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { Forward, PersonStanding } from "lucide-react";
+import { Forward, PersonStanding, RectangleVertical } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useQuery } from "@tanstack/react-query";
@@ -84,11 +84,18 @@ export function CommandMenu() {
         <CommandSeparator />
         <CommandGroup heading="Saved Searches">
           <CommandItem>
-            <PersonStanding className="mr-2 h-4 w-4" />
+            <RectangleVertical className="mr-2 h-4 w-4" />
             <Link to="/random">
               <span>Random Card</span>
             </Link>
             <CommandShortcut>ctrl/⌘ - K</CommandShortcut>
+          </CommandItem>
+          <CommandItem>
+            <PersonStanding className="mr-2 h-4 w-4" />
+            <Link to="/random-hero">
+              <span>Random Hero</span>
+            </Link>
+            <CommandShortcut>ctrl/⌘ - H</CommandShortcut>
           </CommandItem>
         </CommandGroup>
       </CommandList>
