@@ -8,6 +8,8 @@ import HealthSymbol from "@/assets/img/symbols/symbol-health.png";
 
 import ReactMarkdown, { Components } from "react-markdown";
 import { Link } from "@tanstack/react-router";
+import { keywordData } from "@/lib/constants/keywords";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 const CustomNotation = ({ notation }: { notation: string }) => {
   switch (notation) {
@@ -57,11 +59,17 @@ const CustomNotation = ({ notation }: { notation: string }) => {
   }
 };
 
+const filterKeywordTextByName = (name: string) => {
+  return keywordData.find(
+    (keyword) => keyword.name.toLocaleLowerCase() === name
+  )?.description;
+};
+
 // Custom renderer for paragraphs
 const CustomParagraph: Components["p"] = ({ children }) => {
   return (
     <p>
-      {React.Children.map(children, (child) => {
+      {React.Children.map(children, (child: React.ReactNode) => {
         if (typeof child === "string") {
           // Use regex to find all instances of {notation}
           const parts = child.split(/(\{[^}]+\})/g);
@@ -72,6 +80,27 @@ const CustomParagraph: Components["p"] = ({ children }) => {
             }
             return part;
           });
+        } else if (typeof child === "object" && child !== null) {
+          // Check if the child is a Tooltip component
+          const keyword = (child as React.ReactElement).props.children;
+          const popoverContent = filterKeywordTextByName(keyword);
+          if (!popoverContent) return child;
+          return (
+            <Popover>
+              <PopoverTrigger>{child}</PopoverTrigger>
+              <PopoverContent className="w-80">
+                {" "}
+                <ReactMarkdown
+                  className="prose prose-sm max-w-none"
+                  components={{
+                    p: CustomParagraph,
+                  }}
+                >
+                  {popoverContent}
+                </ReactMarkdown>
+              </PopoverContent>
+            </Popover>
+          );
         }
         return child;
       })}
