@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
+    "@node-rs/argon2": "^1.8.3",
     "@tcg-app/core": "*",
     "hono": "^4.4.9"
   },
