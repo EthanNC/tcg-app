@@ -20,6 +20,15 @@ export const byId = zod(Schema.shape.id, async (id) => {
   return respone[0];
 });
 
+export const byUsername = zod(Schema.shape.username, async (username) => {
+  const respone = await db
+    .select()
+    .from(users)
+    .where(eq(users.username, username))
+    .execute();
+  return respone[0];
+});
+
 export const create = zod(
   Schema.omit({ emailVerified: true }),
   async (user) => {

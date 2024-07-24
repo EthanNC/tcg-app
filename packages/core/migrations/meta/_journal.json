@@ -57,6 +57,13 @@
       "when": 1721753233398,
       "tag": "0007_great_patch",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1721846037943,
+      "tag": "0008_nebulous_sharon_carter",
+      "breakpoints": true
     }
   ]
 }
