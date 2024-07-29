@@ -1,9 +1,11 @@
 import { hash, verify } from "@node-rs/argon2";
 import { lucia } from "@tcg-app/core/auth";
 import { byUsername, create } from "@tcg-app/core/user";
+import { DatabaseError } from "@tcg-app/core/utils/http";
 import { Hono } from "hono";
 import { Context } from "src/lib/context";
 import { randomUUID } from "node:crypto";
+import { StatusCode } from "hono/utils/http-status";
 
 const app = new Hono<Context>()
   .post("/signup", async (c) => {
@@ -67,14 +69,36 @@ const app = new Hono<Context>()
         },
         201
       );
-    } catch (e) {
-      console.error(e);
-      return c.json(
-        {
-          error: "Error signup",
-        },
-        400
-      );
+    } catch (error) {
+      if ((error as DatabaseError).type === "PostgresError") {
+        const dbError = error as DatabaseError;
+        let statusCode: StatusCode;
+        let errorMessage: string;
+
+        switch (dbError.code) {
+          case "23505":
+            statusCode = 409;
+            errorMessage = "User or Email Already Exists";
+            break;
+          case "23503":
+            statusCode = 409;
+            errorMessage = "Foreign key constraint violation";
+            break;
+          default:
+            statusCode = 500;
+            errorMessage = "Database error";
+        }
+
+        return c.json({ error: errorMessage }, statusCode);
+      } else {
+        console.error(error);
+        return c.json(
+          {
+            error: "Error signup",
+          },
+          500
+        );
+      }
     }
   })
   .post("/login", async (c) => {
@@ -109,43 +133,54 @@ const app = new Hono<Context>()
       );
     }
 
-    const existingUser = await byUsername(username);
-    if (!existingUser) {
+    try {
+      const existingUser = await byUsername(username);
+
+      if (!existingUser) {
+        return c.json(
+          {
+            error: "Invalid username or password",
+          },
+          400
+        );
+      }
+      const validPassword = await verify(existingUser.passwordHash, password, {
+        memoryCost: 19456,
+        timeCost: 2,
+        outputLen: 32,
+        parallelism: 1,
+      });
+
+      if (!validPassword) {
+        return c.json(
+          {
+            error: "Invalid username or password",
+          },
+          400
+        );
+      }
+
+      const session = await lucia.createSession(existingUser.id, {});
+      const token = session.id;
       return c.json(
         {
-          error: "Invalid username or password",
+          token,
+          user: {
+            id: existingUser.id,
+            username: existingUser.username,
+          },
         },
-        400
+        201
       );
-    }
-    const validPassword = await verify(existingUser.passwordHash, password, {
-      memoryCost: 19456,
-      timeCost: 2,
-      outputLen: 32,
-      parallelism: 1,
-    });
-
-    if (!validPassword) {
+    } catch (error) {
+      console.error(error);
       return c.json(
         {
-          error: "Invalid username or password",
+          error: "Error login",
         },
-        400
+        500
       );
     }
-
-    const session = await lucia.createSession(existingUser.id, {});
-    const token = session.id;
-    return c.json(
-      {
-        token,
-        user: {
-          id: existingUser.id,
-          username: existingUser.username,
-        },
-      },
-      201
-    );
   })
   .post("/logout", async (c) => {
     const authorizationHeader = c.req.header("Authorization");
