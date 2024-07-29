@@ -54,7 +54,20 @@ export async function logoutUser(token: string) {
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!res.ok) {
-    throw new Error("server error");
+    const error = await res.json();
+    throw error;
+  }
+  const data = await res.json();
+  return data;
+}
+
+export async function getMe(token: string) {
+  const res = await client.auth.me.$get({
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw error;
   }
   const data = await res.json();
   return data;

@@ -8,6 +8,13 @@ import { randomUUID } from "node:crypto";
 import { StatusCode } from "hono/utils/http-status";
 
 const app = new Hono<Context>()
+  .get("/me", async (c) => {
+    const user = c.get("user");
+    if (!user) {
+      return c.json({ error: "No user found" }, 404);
+    }
+    return c.json(user);
+  })
   .post("/signup", async (c) => {
     const body = await c.req.json<{
       username: string;
