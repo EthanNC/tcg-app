@@ -8,6 +8,13 @@ import { useMutation, type QueryClient } from "@tanstack/react-query";
 import { IAuthContext } from "@/hooks/providers/auth";
 import { Button } from "@/components/ui/button";
 import { logoutUser } from "@/lib/api/auth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -20,6 +27,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function NavBar() {
   const { auth } = Route.useRouteContext();
+
   const mutation = useMutation({
     mutationFn: (token: string) => logoutUser(token),
     onSuccess: () => {
@@ -35,13 +43,23 @@ function NavBar() {
       </Link>
       <div className="flex gap-2 items-center">
         {auth?.isAuthenticated ? (
-          <Button
-            onClick={() => mutation.mutate(auth.user!)}
-            variant="link"
-            size="lg"
-          >
-            Logout
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger>Profile</DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem asChild>
+                <span>My Wishlist</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Button
+                  onClick={() => mutation.mutate(auth.user!)}
+                  variant="link"
+                >
+                  Logout
+                </Button>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <Link to="/auth/login" className="[&.active]:font-bold">
             Login
