@@ -1,22 +1,20 @@
-sst.linkable(supabase.Project, function (item: any) {
-  return {
-    properties: {
-      user: $interpolate`postgres.${item.id}`,
-      password: item.databasePassword,
-      host: $interpolate`aws-0-${item.region}.pooler.supabase.com`,
-      port: 5432,
-      database: "postgres",
-    },
-  };
-});
-
-export const project = new supabase.Project("Database", {
+const project = new supabase.Project("Project", {
   name: $interpolate`${$app.name}-${$app.stage}`,
   region: "us-east-1",
   organizationId: process.env.SUPABASE_ORG_ID!,
   databasePassword: new random.RandomString("DatabasePassword", {
     length: 16,
   }).result,
+});
+
+export const database = new sst.Linkable("Database", {
+  properties: {
+    user: $interpolate`postgres.${project.id}`,
+    password: project.databasePassword,
+    host: $interpolate`aws-0-${project.region}.pooler.supabase.com`,
+    port: 5432,
+    database: "postgres",
+  },
 });
 
 !$dev &&

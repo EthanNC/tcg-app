@@ -3,6 +3,9 @@ import { Resource } from "sst";
 export default defineConfig({
   schema: ["./src/**/*.sql.ts"],
   out: "./migrations",
+  migrations: {
+    schema: "public",
+  },
   dialect: "postgresql",
   dbCredentials: {
     host: Resource.Database.host,

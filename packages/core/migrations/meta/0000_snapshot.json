@@ -1,11 +1,11 @@
 {
-  "id": "00000000-0000-0000-0000-000000000000",
-  "prevId": "",
+  "id": "3251c7f9-9e30-49b1-8ae6-ebb80c6960cf",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.abilities": {
-      "name": "abilities",
+    "public.card_printings": {
+      "name": "card_printings",
       "schema": "",
       "columns": {
         "unique_id": {
@@ -14,177 +14,118 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.artists": {
-      "name": "artists",
-      "schema": "",
-      "columns": {
-        "name": {
-          "name": "name",
-          "type": "varchar(1000)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "artists_name_key": {
-          "columns": [
-            "name"
-          ],
-          "nullsNotDistinct": false,
-          "name": "artists_name_key"
-        }
-      }
-    },
-    "public.sets": {
-      "name": "sets",
-      "schema": "",
-      "columns": {
-        "unique_id": {
-          "name": "unique_id",
-          "type": "varchar(21)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "sets_unique_id_id_key": {
-          "columns": [
-            "unique_id",
-            "id"
-          ],
-          "nullsNotDistinct": false,
-          "name": "sets_unique_id_id_key"
-        }
-      }
-    },
-    "public.set_printings": {
-      "name": "set_printings",
-      "schema": "",
-      "columns": {
-        "unique_id": {
-          "name": "unique_id",
-          "type": "varchar(21)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "set_unique_id": {
-          "name": "set_unique_id",
+        "card_unique_id": {
+          "name": "card_unique_id",
           "type": "varchar(21)",
           "primaryKey": false,
           "notNull": true
         },
-        "language": {
-          "name": "language",
-          "type": "varchar(10)",
+        "set_printing_unique_id": {
+          "name": "set_printing_unique_id",
+          "type": "varchar(21)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "card_id": {
+          "name": "card_id",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "set_id": {
+          "name": "set_id",
+          "type": "varchar(15)",
           "primaryKey": false,
           "notNull": true
         },
         "edition": {
           "name": "edition",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "start_card_id": {
-          "name": "start_card_id",
           "type": "varchar(15)",
           "primaryKey": false,
           "notNull": true
         },
-        "end_card_id": {
-          "name": "end_card_id",
+        "foiling": {
+          "name": "foiling",
           "type": "varchar(15)",
           "primaryKey": false,
           "notNull": true
         },
-        "initial_release_date": {
-          "name": "initial_release_date",
-          "type": "timestamp",
+        "rarity": {
+          "name": "rarity",
+          "type": "varchar(15)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "out_of_print_date": {
-          "name": "out_of_print_date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "product_page": {
-          "name": "product_page",
+        "artist": {
+          "name": "artist",
           "type": "varchar(1000)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "collectors_center": {
-          "name": "collectors_center",
+        "art_variation": {
+          "name": "art_variation",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "flavor_text": {
+          "name": "flavor_text",
+          "type": "varchar(10000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "flavor_text_plain": {
+          "name": "flavor_text_plain",
+          "type": "varchar(10000)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "image_url": {
+          "name": "image_url",
           "type": "varchar(1000)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
-        "card_gallery": {
-          "name": "card_gallery",
+        "tcgplayer_product_id": {
+          "name": "tcgplayer_product_id",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tcgplayer_url": {
+          "name": "tcgplayer_url",
           "type": "varchar(1000)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "set_printings_set_unique_id_fkey": {
-          "name": "set_printings_set_unique_id_fkey",
-          "tableFrom": "set_printings",
-          "tableTo": "sets",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "set_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
+        "card_printings_card_unique_id_cards_unique_id_fk": {
+          "name": "card_printings_card_unique_id_cards_unique_id_fk",
+          "tableFrom": "card_printings",
+          "tableTo": "cards",
+          "columnsFrom": ["card_unique_id"],
+          "columnsTo": ["unique_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "card_printings_set_printing_unique_id_set_printings_unique_id_fk": {
+          "name": "card_printings_set_printing_unique_id_set_printings_unique_id_fk",
+          "tableFrom": "card_printings",
+          "tableTo": "set_printings",
+          "columnsFrom": ["set_printing_unique_id"],
+          "columnsTo": ["unique_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "set_printings_set_unique_id_language_edition_key": {
-          "columns": [
-            "set_unique_id",
-            "language",
-            "edition"
-          ],
+        "card_printings_unique_id_card_id_edition_art_variation_key": {
+          "name": "card_printings_unique_id_card_id_edition_art_variation_key",
           "nullsNotDistinct": false,
-          "name": "set_printings_set_unique_id_language_edition_key"
+          "columns": ["unique_id", "card_id", "edition", "art_variation"]
         }
       }
     },
@@ -477,412 +418,35 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "name_search_index": {
+          "name": "name_search_index",
+          "columns": [
+            {
+              "expression": "to_tsvector('english', \"name\")",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "cards_name_pitch_key": {
-          "columns": [
-            "name",
-            "pitch"
-          ],
+          "name": "cards_name_pitch_key",
           "nullsNotDistinct": false,
-          "name": "cards_name_pitch_key"
+          "columns": ["name", "pitch"]
         }
       }
     },
-    "public.card_printings": {
-      "name": "card_printings",
-      "schema": "",
-      "columns": {
-        "unique_id": {
-          "name": "unique_id",
-          "type": "varchar(21)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "card_unique_id": {
-          "name": "card_unique_id",
-          "type": "varchar(21)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "set_printing_unique_id": {
-          "name": "set_printing_unique_id",
-          "type": "varchar(21)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "card_id": {
-          "name": "card_id",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "set_id": {
-          "name": "set_id",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "edition": {
-          "name": "edition",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "foiling": {
-          "name": "foiling",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "rarity": {
-          "name": "rarity",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "artist": {
-          "name": "artist",
-          "type": "varchar(1000)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "art_variation": {
-          "name": "art_variation",
-          "type": "varchar(15)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "flavor_text": {
-          "name": "flavor_text",
-          "type": "varchar(10000)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "flavor_text_plain": {
-          "name": "flavor_text_plain",
-          "type": "varchar(10000)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "image_url": {
-          "name": "image_url",
-          "type": "varchar(1000)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tcgplayer_product_id": {
-          "name": "tcgplayer_product_id",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "tcgplayer_url": {
-          "name": "tcgplayer_url",
-          "type": "varchar(1000)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "card_printings_card_unique_id_fkey": {
-          "name": "card_printings_card_unique_id_fkey",
-          "tableFrom": "card_printings",
-          "tableTo": "cards",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "card_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "card_printings_set_printing_unique_id_fkey": {
-          "name": "card_printings_set_printing_unique_id_fkey",
-          "tableFrom": "card_printings",
-          "tableTo": "set_printings",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "set_printing_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "card_printings_unique_id_card_id_edition_art_variation_key": {
-          "columns": [
-            "unique_id",
-            "card_id",
-            "edition",
-            "art_variation"
-          ],
-          "nullsNotDistinct": false,
-          "name": "card_printings_unique_id_card_id_edition_art_variation_key"
-        }
-      }
-    },
-    "public.card_face_associations": {
-      "name": "card_face_associations",
-      "schema": "",
-      "columns": {
-        "front_unique_id": {
-          "name": "front_unique_id",
-          "type": "varchar(21)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "back_unique_id": {
-          "name": "back_unique_id",
-          "type": "varchar(21)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "is_dfc": {
-          "name": "is_dfc",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "card_face_associations_back_unique_id_fkey": {
-          "name": "card_face_associations_back_unique_id_fkey",
-          "tableFrom": "card_face_associations",
-          "tableTo": "card_printings",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "back_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "card_face_associations_front_unique_id_fkey": {
-          "name": "card_face_associations_front_unique_id_fkey",
-          "tableFrom": "card_face_associations",
-          "tableTo": "card_printings",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "front_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "card_face_associations_front_unique_id_back_unique_id_key": {
-          "columns": [
-            "front_unique_id",
-            "back_unique_id"
-          ],
-          "nullsNotDistinct": false,
-          "name": "card_face_associations_front_unique_id_back_unique_id_key"
-        }
-      }
-    },
-    "public.card_references": {
-      "name": "card_references",
-      "schema": "",
-      "columns": {
-        "card_unique_id": {
-          "name": "card_unique_id",
-          "type": "varchar(21)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "referenced_card_unique_id": {
-          "name": "referenced_card_unique_id",
-          "type": "varchar(21)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "card_references_card_unique_id_fkey": {
-          "name": "card_references_card_unique_id_fkey",
-          "tableFrom": "card_references",
-          "tableTo": "cards",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "card_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "card_references_referenced_card_unique_id_fkey": {
-          "name": "card_references_referenced_card_unique_id_fkey",
-          "tableFrom": "card_references",
-          "tableTo": "cards",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "referenced_card_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "card_references_card_unique_id_referenced_card_unique_id_key": {
-          "columns": [
-            "card_unique_id",
-            "referenced_card_unique_id"
-          ],
-          "nullsNotDistinct": false,
-          "name": "card_references_card_unique_id_referenced_card_unique_id_key"
-        }
-      }
-    },
-    "public.editions": {
-      "name": "editions",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(255)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.foilings": {
-      "name": "foilings",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(255)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.icons": {
-      "name": "icons",
-      "schema": "",
-      "columns": {
-        "icon": {
-          "name": "icon",
-          "type": "varchar(255)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.keywords": {
-      "name": "keywords",
-      "schema": "",
-      "columns": {
-        "unique_id": {
-          "name": "unique_id",
-          "type": "varchar(21)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar(1000)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "keywords_name_key": {
-          "columns": [
-            "name"
-          ],
-          "nullsNotDistinct": false,
-          "name": "keywords_name_key"
-        }
-      }
-    },
-    "public.rarities": {
-      "name": "rarities",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(255)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "public.types": {
-      "name": "types",
+    "public.abilities": {
+      "name": "abilities",
       "schema": "",
       "columns": {
         "unique_id": {
@@ -928,17 +492,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "ability_translations_ability_unique_id_fkey": {
-          "name": "ability_translations_ability_unique_id_fkey",
+        "ability_translations_ability_unique_id_abilities_unique_id_fk": {
+          "name": "ability_translations_ability_unique_id_abilities_unique_id_fk",
           "tableFrom": "ability_translations",
           "tableTo": "abilities",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "ability_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
+          "columnsFrom": ["ability_unique_id"],
+          "columnsTo": ["unique_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -946,121 +505,132 @@
       "compositePrimaryKeys": {
         "ability_translations_pkey": {
           "name": "ability_translations_pkey",
-          "columns": [
-            "ability_unique_id",
-            "language"
-          ]
+          "columns": ["ability_unique_id", "language"]
         }
       },
       "uniqueConstraints": {}
     },
-    "public.type_translations": {
-      "name": "type_translations",
+    "public.artists": {
+      "name": "artists",
       "schema": "",
       "columns": {
-        "type_unique_id": {
-          "name": "type_unique_id",
-          "type": "varchar(21)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "language": {
-          "name": "language",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "name": {
           "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "type_translations_type_unique_id_fkey": {
-          "name": "type_translations_type_unique_id_fkey",
-          "tableFrom": "type_translations",
-          "tableTo": "types",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "type_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "type_translations_pkey": {
-          "name": "type_translations_pkey",
-          "columns": [
-            "type_unique_id",
-            "language"
-          ]
-        }
-      },
-      "uniqueConstraints": {}
-    },
-    "public.keyword_translations": {
-      "name": "keyword_translations",
-      "schema": "",
-      "columns": {
-        "keyword_unique_id": {
-          "name": "keyword_unique_id",
-          "type": "varchar(21)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "language": {
-          "name": "language",
-          "type": "varchar(10)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "description": {
-          "name": "description",
           "type": "varchar(1000)",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "artists_name_key": {
+          "name": "artists_name_key",
+          "nullsNotDistinct": false,
+          "columns": ["name"]
+        }
+      }
+    },
+    "public.card_face_associations": {
+      "name": "card_face_associations",
+      "schema": "",
+      "columns": {
+        "front_unique_id": {
+          "name": "front_unique_id",
+          "type": "varchar(21)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "back_unique_id": {
+          "name": "back_unique_id",
+          "type": "varchar(21)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "is_dfc": {
+          "name": "is_dfc",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
       "foreignKeys": {
-        "keyword_translations_keyword_unique_id_fkey": {
-          "name": "keyword_translations_keyword_unique_id_fkey",
-          "tableFrom": "keyword_translations",
-          "tableTo": "keywords",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "keyword_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
+        "card_face_associations_front_unique_id_card_printings_unique_id_fk": {
+          "name": "card_face_associations_front_unique_id_card_printings_unique_id_fk",
+          "tableFrom": "card_face_associations",
+          "tableTo": "card_printings",
+          "columnsFrom": ["front_unique_id"],
+          "columnsTo": ["unique_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "card_face_associations_back_unique_id_card_printings_unique_id_fk": {
+          "name": "card_face_associations_back_unique_id_card_printings_unique_id_fk",
+          "tableFrom": "card_face_associations",
+          "tableTo": "card_printings",
+          "columnsFrom": ["back_unique_id"],
+          "columnsTo": ["unique_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "keyword_translations_pkey": {
-          "name": "keyword_translations_pkey",
-          "columns": [
-            "keyword_unique_id",
-            "language"
-          ]
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "card_face_associations_front_unique_id_back_unique_id_key": {
+          "name": "card_face_associations_front_unique_id_back_unique_id_key",
+          "nullsNotDistinct": false,
+          "columns": ["front_unique_id", "back_unique_id"]
+        }
+      }
+    },
+    "public.card_references": {
+      "name": "card_references",
+      "schema": "",
+      "columns": {
+        "card_unique_id": {
+          "name": "card_unique_id",
+          "type": "varchar(21)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "referenced_card_unique_id": {
+          "name": "referenced_card_unique_id",
+          "type": "varchar(21)",
+          "primaryKey": false,
+          "notNull": true
         }
       },
-      "uniqueConstraints": {}
+      "indexes": {},
+      "foreignKeys": {
+        "card_references_card_unique_id_cards_unique_id_fk": {
+          "name": "card_references_card_unique_id_cards_unique_id_fk",
+          "tableFrom": "card_references",
+          "tableTo": "cards",
+          "columnsFrom": ["card_unique_id"],
+          "columnsTo": ["unique_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "card_references_referenced_card_unique_id_cards_unique_id_fk": {
+          "name": "card_references_referenced_card_unique_id_cards_unique_id_fk",
+          "tableFrom": "card_references",
+          "tableTo": "cards",
+          "columnsFrom": ["referenced_card_unique_id"],
+          "columnsTo": ["unique_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "card_references_card_unique_id_referenced_card_unique_id_key": {
+          "name": "card_references_card_unique_id_referenced_card_unique_id_key",
+          "nullsNotDistinct": false,
+          "columns": ["card_unique_id", "referenced_card_unique_id"]
+        }
+      }
     },
     "public.card_translations": {
       "name": "card_translations",
@@ -1153,17 +723,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "card_translations_card_unique_id_fkey": {
-          "name": "card_translations_card_unique_id_fkey",
+        "card_translations_card_unique_id_cards_unique_id_fk": {
+          "name": "card_translations_card_unique_id_cards_unique_id_fk",
           "tableFrom": "card_translations",
           "tableTo": "cards",
-          "schemaTo": "public",
-          "columnsFrom": [
-            "card_unique_id"
-          ],
-          "columnsTo": [
-            "unique_id"
-          ],
+          "columnsFrom": ["card_unique_id"],
+          "columnsTo": ["unique_id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1171,199 +736,476 @@
       "compositePrimaryKeys": {
         "card_translations_pkey": {
           "name": "card_translations_pkey",
-          "columns": [
-            "card_unique_id",
-            "language"
-          ]
+          "columns": ["card_unique_id", "language"]
         }
       },
       "uniqueConstraints": {}
-    }
-  },
-  "enums": {
-    "auth.aal_level": {
-      "name": "aal_level",
-      "values": [
-        "aal1",
-        "aal2",
-        "aal3"
-      ],
-      "schema": "auth"
     },
-    "auth.code_challenge_method": {
-      "name": "code_challenge_method",
-      "values": [
-        "s256",
-        "plain"
-      ],
-      "schema": "auth"
-    },
-    "auth.factor_status": {
-      "name": "factor_status",
-      "values": [
-        "unverified",
-        "verified"
-      ],
-      "schema": "auth"
-    },
-    "auth.factor_type": {
-      "name": "factor_type",
-      "values": [
-        "totp",
-        "webauthn"
-      ],
-      "schema": "auth"
-    },
-    "auth.one_time_token_type": {
-      "name": "one_time_token_type",
-      "values": [
-        "confirmation_token",
-        "reauthentication_token",
-        "recovery_token",
-        "email_change_token_new",
-        "email_change_token_current",
-        "phone_change_token"
-      ],
-      "schema": "auth"
-    },
-    "pgsodium.key_status": {
-      "name": "key_status",
-      "values": [
-        "default",
-        "valid",
-        "invalid",
-        "expired"
-      ],
-      "schema": "pgsodium"
-    },
-    "pgsodium.key_type": {
-      "name": "key_type",
-      "values": [
-        "aead-ietf",
-        "aead-det",
-        "hmacsha512",
-        "hmacsha256",
-        "auth",
-        "shorthash",
-        "generichash",
-        "kdf",
-        "secretbox",
-        "secretstream",
-        "stream_xchacha20"
-      ],
-      "schema": "pgsodium"
-    },
-    "realtime.action": {
-      "name": "action",
-      "values": [
-        "INSERT",
-        "UPDATE",
-        "DELETE",
-        "TRUNCATE",
-        "ERROR"
-      ],
-      "schema": "realtime"
-    },
-    "realtime.equality_op": {
-      "name": "equality_op",
-      "values": [
-        "eq",
-        "neq",
-        "lt",
-        "lte",
-        "gt",
-        "gte",
-        "in"
-      ],
-      "schema": "realtime"
-    }
-  },
-  "schemas": {},
-  "_meta": {
-    "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "internal": {
-    "tables": {
-      "cards": {
-        "columns": {
-          "types": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "card_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "abilities_and_effects": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "ability_and_effect_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "granted_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "removed_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "interacts_with_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          }
+    "public.editions": {
+      "name": "editions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
         }
       },
-      "card_translations": {
-        "columns": {
-          "types": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "card_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "abilities_and_effects": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "ability_and_effect_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "granted_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "removed_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          },
-          "interacts_with_keywords": {
-            "isArray": true,
-            "dimensions": 1,
-            "rawType": "character varying(255)"
-          }
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.foilings": {
+      "name": "foilings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.icons": {
+      "name": "icons",
+      "schema": "",
+      "columns": {
+        "icon": {
+          "name": "icon",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.keyword_translations": {
+      "name": "keyword_translations",
+      "schema": "",
+      "columns": {
+        "keyword_unique_id": {
+          "name": "keyword_unique_id",
+          "type": "varchar(21)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "language": {
+          "name": "language",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "keyword_translations_keyword_unique_id_keywords_unique_id_fk": {
+          "name": "keyword_translations_keyword_unique_id_keywords_unique_id_fk",
+          "tableFrom": "keyword_translations",
+          "tableTo": "keywords",
+          "columnsFrom": ["keyword_unique_id"],
+          "columnsTo": ["unique_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "keyword_translations_pkey": {
+          "name": "keyword_translations_pkey",
+          "columns": ["keyword_unique_id", "language"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.keywords": {
+      "name": "keywords",
+      "schema": "",
+      "columns": {
+        "unique_id": {
+          "name": "unique_id",
+          "type": "varchar(21)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "keywords_name_key": {
+          "name": "keywords_name_key",
+          "nullsNotDistinct": false,
+          "columns": ["name"]
+        }
+      }
+    },
+    "public.rarities": {
+      "name": "rarities",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.type_translations": {
+      "name": "type_translations",
+      "schema": "",
+      "columns": {
+        "type_unique_id": {
+          "name": "type_unique_id",
+          "type": "varchar(21)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "language": {
+          "name": "language",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "type_translations_type_unique_id_types_unique_id_fk": {
+          "name": "type_translations_type_unique_id_types_unique_id_fk",
+          "tableFrom": "type_translations",
+          "tableTo": "types",
+          "columnsFrom": ["type_unique_id"],
+          "columnsTo": ["unique_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "type_translations_pkey": {
+          "name": "type_translations_pkey",
+          "columns": ["type_unique_id", "language"]
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "public.types": {
+      "name": "types",
+      "schema": "",
+      "columns": {
+        "unique_id": {
+          "name": "unique_id",
+          "type": "varchar(21)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.sessions": {
+      "name": "sessions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fresh": {
+          "name": "fresh",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "sessions_user_id_users_id_fk": {
+          "name": "sessions_user_id_users_id_fk",
+          "tableFrom": "sessions",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.set_printings": {
+      "name": "set_printings",
+      "schema": "",
+      "columns": {
+        "unique_id": {
+          "name": "unique_id",
+          "type": "varchar(21)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "set_unique_id": {
+          "name": "set_unique_id",
+          "type": "varchar(21)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "language": {
+          "name": "language",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "edition": {
+          "name": "edition",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "start_card_id": {
+          "name": "start_card_id",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "end_card_id": {
+          "name": "end_card_id",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "initial_release_date": {
+          "name": "initial_release_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "out_of_print_date": {
+          "name": "out_of_print_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "product_page": {
+          "name": "product_page",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "collectors_center": {
+          "name": "collectors_center",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "card_gallery": {
+          "name": "card_gallery",
+          "type": "varchar(1000)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "set_printings_set_unique_id_sets_unique_id_fk": {
+          "name": "set_printings_set_unique_id_sets_unique_id_fk",
+          "tableFrom": "set_printings",
+          "tableTo": "sets",
+          "columnsFrom": ["set_unique_id"],
+          "columnsTo": ["unique_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "set_printings_set_unique_id_language_edition_key": {
+          "name": "set_printings_set_unique_id_language_edition_key",
+          "nullsNotDistinct": false,
+          "columns": ["set_unique_id", "language", "edition"]
+        }
+      }
+    },
+    "public.sets": {
+      "name": "sets",
+      "schema": "",
+      "columns": {
+        "unique_id": {
+          "name": "unique_id",
+          "type": "varchar(21)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "sets_unique_id_id_key": {
+          "name": "sets_unique_id_id_key",
+          "nullsNotDistinct": false,
+          "columns": ["unique_id", "id"]
+        }
+      }
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "emailVerified": {
+          "name": "emailVerified",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "nullsNotDistinct": false,
+          "columns": ["username"]
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": ["email"]
         }
       }
     }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
   }
 }

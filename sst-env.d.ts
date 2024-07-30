@@ -13,7 +13,7 @@ declare module "sst" {
       host: string
       password: string
       port: number
-      type: "supabase.index/project.Project"
+      type: "sst.sst.Linkable"
       user: string
     }
     StaticSite: {

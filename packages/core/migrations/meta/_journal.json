@@ -5,64 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1719585810061,
-      "tag": "0000_previous_karma",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1719588923709,
-      "tag": "0001_hot_wild_pack",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1720400094910,
-      "tag": "0002_flawless_shriek",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1720717581446,
-      "tag": "0003_young_rocket_racer",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1721143277397,
-      "tag": "0004_bright_preak",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1721675371664,
-      "tag": "0005_sharp_juggernaut",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1721682215840,
-      "tag": "0006_complex_sally_floyd",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1721753233398,
-      "tag": "0007_great_patch",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1721846037943,
-      "tag": "0008_nebulous_sharon_carter",
+      "when": 1722361490395,
+      "tag": "0000_nasty_chat",
       "breakpoints": true
     }
   ]
