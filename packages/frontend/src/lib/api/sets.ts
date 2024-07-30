@@ -1,7 +1,4 @@
-import { AppType } from "@tcg-app/functions/api";
-import { hc } from "hono/client";
-
-const client = hc<AppType>(import.meta.env.VITE_API_URL);
+import { client } from ".";
 
 export const getSet = async (setCode: string) => {
   const response = await client.sets[":id"].$get({ param: { id: setCode } });

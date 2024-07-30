@@ -1,5 +1,9 @@
-import { pgTable, text } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-export const user = pgTable("user", {
-  id: text("id").primaryKey(),
+export const users = pgTable("users", {
+  id: uuid("id").primaryKey(),
+  username: varchar("username", { length: 256 }).notNull().unique(),
+  email: varchar("email", { length: 256 }).notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
 });

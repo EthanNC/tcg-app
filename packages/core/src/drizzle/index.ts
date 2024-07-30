@@ -1,7 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { Resource } from "sst";
-
 export const client = postgres({
   host: Resource.Database.host,
   database: Resource.Database.database,
@@ -10,4 +9,6 @@ export const client = postgres({
   password: Resource.Database.password,
 });
 
-export const db = drizzle(client);
+export const db = drizzle(client, {
+  logger: process.env.NODE_ENV === "development",
+});

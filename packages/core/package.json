@@ -6,7 +6,8 @@
     "db": "sst shell drizzle-kit",
     "db:studio": "sst shell drizzle-kit studio",
     "db:migrate": "sst shell drizzle-kit migrate",
-    "db:generate": "sst shell drizzle-kit generate"
+    "db:generate": "sst shell drizzle-kit generate",
+    "db:push": "sst shell drizzle-kit push"
   },
   "exports": {
     "./*": [
@@ -15,8 +16,10 @@
     ]
   },
   "dependencies": {
+    "@lucia-auth/adapter-drizzle": "^1.0.7",
     "drizzle-orm": "^0.32.0",
     "drizzle-zod": "^0.5.1",
+    "lucia": "^3.2.0",
     "postgres": "^3.4.4",
     "zod": "^3.23.8"
   },

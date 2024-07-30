@@ -18,6 +18,8 @@ import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as SetsSetIdImport } from './routes/sets/$setId'
 import { Route as CardsCardIdImport } from './routes/cards/$cardId'
+import { Route as AuthSignupImport } from './routes/auth/signup'
+import { Route as AuthLoginImport } from './routes/auth/login'
 
 // Create/Update Routes
 
@@ -56,6 +58,16 @@ const CardsCardIdRoute = CardsCardIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthSignupRoute = AuthSignupImport.update({
+  path: '/auth/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthLoginRoute = AuthLoginImport.update({
+  path: '/auth/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -80,6 +92,14 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RandomHeroImport
       parentRoute: typeof rootRoute
     }
+    '/auth/login': {
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/signup': {
+      preLoaderRoute: typeof AuthSignupImport
+      parentRoute: typeof rootRoute
+    }
     '/cards/$cardId': {
       preLoaderRoute: typeof CardsCardIdImport
       parentRoute: typeof rootRoute
@@ -99,6 +119,8 @@ export const routeTree = rootRoute.addChildren([
   AboutRoute,
   RandomRoute,
   RandomHeroRoute,
+  AuthLoginRoute,
+  AuthSignupRoute,
   CardsCardIdRoute,
   SetsSetIdRoute,
 ])
