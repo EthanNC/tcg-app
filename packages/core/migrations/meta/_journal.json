@@ -8,6 +8,13 @@
       "when": 1722361490395,
       "tag": "0000_nasty_chat",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1722439046246,
+      "tag": "0001_white_mesmero",
+      "breakpoints": true
     }
   ]
 }
