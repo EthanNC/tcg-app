@@ -6,6 +6,7 @@ import { handle } from "hono/aws-lambda";
 import sets from "./sets";
 import cards from "./cards";
 import auth from "./auth";
+import lists from "./lists";
 
 import { lucia, verifyRequestOrigin } from "@tcg-app/core/auth";
 import type { Context } from "../lib/context";
@@ -49,7 +50,8 @@ const app = new Hono<Context>()
   })
   .route("/auth", auth)
   .route("/cards", cards)
-  .route("/sets", sets);
+  .route("/sets", sets)
+  .route("/lists", lists);
 
 export type AppType = typeof app;
 

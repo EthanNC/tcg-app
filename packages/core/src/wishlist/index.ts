@@ -14,6 +14,7 @@ const ListSchema = createSelectSchema(wishlists, {
 const ItemSchema = createSelectSchema(wishlist_items, {
   id: (z) => z.id.uuid(),
   wishlistId: (z) => z.wishlistId.uuid(),
+  quantity: (z) => z.quantity.int().positive().optional(),
 });
 
 export const listsbyUserId = zod(ListSchema.shape.userId, async (userId) => {
@@ -76,10 +77,7 @@ export const createUserListIfNotExists = zod(ListSchema, async (newList) => {
   const [wishlist] = await db
     .insert(wishlists)
     .values({
-      id: newList.id,
-      userId: newList.userId,
-      name: newList.name,
-      createdAt: new Date(),
+      ...newList,
     })
     .returning();
 
