@@ -13,7 +13,11 @@ const app = new Hono<Context>()
     if (!user) {
       return c.json({ error: "No user found" }, 404);
     }
-    return c.json(user);
+    return c.json({
+      //type inference is failing on client
+      id: user.id as string,
+      username: user.username as string,
+    });
   })
   .post("/signup", async (c) => {
     const body = await c.req.json<{

@@ -62,9 +62,12 @@ export async function logoutUser(token: string) {
 }
 
 export async function getMe(token: string) {
-  const res = await client.auth.me.$get({
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const res = await client.auth.me.$get(
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   if (!res.ok) {
     const error = await res.json();
     throw error;
