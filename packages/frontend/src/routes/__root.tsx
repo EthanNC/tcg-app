@@ -47,7 +47,7 @@ function NavBar() {
             <DropdownMenuTrigger>Profile</DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem asChild>
-                <span>My Wishlist</span>
+                <Link to="/profile">Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>

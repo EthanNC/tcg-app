@@ -16,6 +16,7 @@ import { Route as RandomImport } from './routes/random'
 import { Route as AboutImport } from './routes/about'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProfileIndexImport } from './routes/profile/index'
 import { Route as SetsSetIdImport } from './routes/sets/$setId'
 import { Route as CardsCardIdImport } from './routes/cards/$cardId'
 import { Route as AuthSignupImport } from './routes/auth/signup'
@@ -45,6 +46,11 @@ const AuthenticatedRoute = AuthenticatedImport.update({
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileIndexRoute = ProfileIndexImport.update({
+  path: '/profile/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -108,6 +114,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SetsSetIdImport
       parentRoute: typeof rootRoute
     }
+    '/profile/': {
+      preLoaderRoute: typeof ProfileIndexImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -123,6 +133,7 @@ export const routeTree = rootRoute.addChildren([
   AuthSignupRoute,
   CardsCardIdRoute,
   SetsSetIdRoute,
+  ProfileIndexRoute,
 ])
 
 /* prettier-ignore-end */
