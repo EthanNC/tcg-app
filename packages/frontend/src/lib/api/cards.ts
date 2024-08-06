@@ -35,6 +35,8 @@ export async function getRandomCard() {
 export const getRandomCardQueryOptions = queryOptions({
   queryKey: ["random-card"],
   queryFn: getRandomCard,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
 });
 
 export async function searchCard(name: string) {
@@ -71,4 +73,6 @@ export const getRandomHeroCard = async () => {
 export const getRandomHeroCardQueryOptions = queryOptions({
   queryKey: ["random-hero-card"],
   queryFn: () => getRandomHeroCard(),
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
 });
