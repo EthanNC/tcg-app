@@ -90,7 +90,7 @@ export default function Component() {
       setIsSubmitting(false);
       setSubmitSuccess(true);
       if (hasSessionToken(data)) {
-        auth?.login(data.token);
+        auth?.login(data.token, data.user.id);
       }
     },
     onError: (error) => {

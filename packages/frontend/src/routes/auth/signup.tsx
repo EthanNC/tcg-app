@@ -105,7 +105,7 @@ export default function Component() {
     onSuccess: (data) => {
       setSubmitSuccess(true);
       if ("token" in data) {
-        auth?.login(data.token);
+        auth?.login(data.token, data.user.id);
       }
     },
     onError: (error) => {
