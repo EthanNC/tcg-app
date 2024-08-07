@@ -54,6 +54,31 @@ export async function createList(token: string | null, name: string) {
   return data;
 }
 
+const addItem = client.lists["add-item"].$post;
+export type AddItemResponseType = InferResponseType<typeof addItem>;
+export type AddItemResponseType200 = InferResponseType<typeof addItem, 200>;
+
+export async function addCardToList(
+  token: string | null,
+  cardId: string,
+  listId: string
+) {
+  if (!token) {
+    throw new Error("No token provided");
+  }
+  const res = await addItem(
+    { json: { cardId, listId } },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw error;
+  }
+  const data = await res.json();
+  return data;
+}
+
 const removeItem = client.lists["delete-item"].$post;
 export type DeleteItemResponseType = InferResponseType<typeof removeItem>;
 export type DeleteItemResponseType200 = InferResponseType<

@@ -10,6 +10,7 @@ import ReactMarkdown, { Components } from "react-markdown";
 import { Link } from "@tanstack/react-router";
 import { keywordData } from "@/lib/constants/keywords";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import AddToWishlist from "./AddToWishlist";
 
 const CustomNotation = ({ notation }: { notation: string }) => {
   switch (notation) {
@@ -127,11 +128,12 @@ export default function CardDetails({
           </Link>
         </div>
       </div>
-      <div className="col-span-1">
+      <div className="flex flex-col items-center gap-2 col-span-1">
         <img
           src={cardData?.card_printings.image_url}
           alt={cardData?.cards.name}
         />
+        <AddToWishlist cardPrintingId={cardData.card_printings.unique_id} />
       </div>
       <div className="col-span-2">
         <ReactMarkdown

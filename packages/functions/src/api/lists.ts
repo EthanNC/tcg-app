@@ -44,9 +44,24 @@ const app = new Hono<Context>()
     return c.json(list);
   })
   .post("/add-item", async (c) => {
-    const { cardId } = await c.req.json<{ cardId: string }>();
-    const user = c.get("user");
+    const { cardId, listId } = await c.req.json<{
+      cardId: string;
+      listId: string | null;
+    }>();
 
+    if (listId) {
+      const addItem = {
+        id: randomUUID(),
+        wishlistId: listId,
+        cardPrintingId: cardId,
+        updatedAt: new Date(),
+      };
+
+      const item = await createItem(addItem);
+      return c.json(item);
+    }
+
+    const user = c.get("user");
     const defaultList = {
       id: randomUUID(),
       userId: user?.id!,
