@@ -47,14 +47,15 @@ export const searchByName = zod(Schema.shape.name, async (name) => {
   const searchResults = await db
     .select({
       // Select only the columns we need
-      unique_id: cards.unique_id,
       name: cards.name,
-      pitch: cards.pitch,
+      unique_ids: sql`array_agg(${cards.unique_id})`.mapWith(Array<string>),
+      pitches: sql`array_agg(${cards.pitch})`.mapWith(Array<string>),
     })
     .from(cards)
     .where(
       sql`${cards.name} @@ websearch_to_tsquery('english', ${searchQuery})`
-    );
+    )
+    .groupBy(cards.name);
 
   return searchResults;
 });

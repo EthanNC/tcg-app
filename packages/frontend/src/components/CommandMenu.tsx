@@ -68,11 +68,11 @@ export function CommandMenu() {
           <CommandGroup>
             {isLoading && <SearchResultSkeleton />}
             {data?.map((card) => (
-              <CommandItem key={card.unique_id} value={card.name + card.pitch}>
+              <CommandItem key={card.unique_ids.at(0)} value={card.name}>
                 <Forward className="mr-2 h-4 w-4" />
                 <Link
                   to="/cards/$cardId"
-                  params={{ cardId: card.unique_id }}
+                  params={{ cardId: card.unique_ids.at(0) }}
                   from={`/search?name=${card.name}`}
                 >
                   <span>{card.name}</span>
