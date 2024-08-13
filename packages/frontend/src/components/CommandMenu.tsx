@@ -15,12 +15,13 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { useQuery } from "@tanstack/react-query";
 import SearchResultSkeleton from "./SearchSkeleton";
 import { Command as CommandPrimitive } from "cmdk";
+
 export function CommandMenu() {
-  const navigate = useNavigate();
-  //get ?name query param from header
   const looseSearch = useSearch({ strict: false }) as {
     name?: string | undefined;
   };
+  const navigate = useNavigate({ from: looseSearch.name });
+
   const [searchTerm, setSearchTerm] = useState(looseSearch.name || "");
 
   const [searchParams] = useDebounce([searchTerm], 1000);
@@ -40,15 +41,13 @@ export function CommandMenu() {
     return () => document.removeEventListener("keydown", down);
   }, [navigate]);
 
-  const handleSearch = useCallback((query: string) => {
-    setSearchTerm(query);
-  }, []);
-
-  useEffect(() => {
-    if (searchParams) {
-      navigate({ to: "/", search: { name: searchParams } });
-    }
-  }, [searchParams, navigate]);
+  const handleSearch = useCallback(
+    (query: string) => {
+      setSearchTerm(query);
+      navigate({ search: { name: query } });
+    },
+    [navigate]
+  );
 
   return (
     <Command shouldFilter={false} className="mt-10 rounded-lg border shadow-md">
@@ -68,12 +67,11 @@ export function CommandMenu() {
           <CommandGroup>
             {isLoading && <SearchResultSkeleton />}
             {data?.map((card) => (
-              <CommandItem key={card.unique_ids.at(0)} value={card.name}>
+              <CommandItem key={card.unique_ids[0]} value={card.name}>
                 <Forward className="mr-2 h-4 w-4" />
                 <Link
                   to="/cards/$cardId"
-                  params={{ cardId: card.unique_ids.at(0) }}
-                  from={`/search?name=${card.name}`}
+                  params={{ cardId: card.unique_ids[0] }}
                 >
                   <span>{card.name}</span>
                 </Link>

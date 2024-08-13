@@ -79,42 +79,72 @@ const AuthLoginRoute = AuthLoginImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
     '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
     '/random': {
+      id: '/random'
+      path: '/random'
+      fullPath: '/random'
       preLoaderRoute: typeof RandomImport
       parentRoute: typeof rootRoute
     }
     '/random-hero': {
+      id: '/random-hero'
+      path: '/random-hero'
+      fullPath: '/random-hero'
       preLoaderRoute: typeof RandomHeroImport
       parentRoute: typeof rootRoute
     }
     '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
     '/auth/signup': {
+      id: '/auth/signup'
+      path: '/auth/signup'
+      fullPath: '/auth/signup'
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof rootRoute
     }
     '/cards/$cardId': {
+      id: '/cards/$cardId'
+      path: '/cards/$cardId'
+      fullPath: '/cards/$cardId'
       preLoaderRoute: typeof CardsCardIdImport
       parentRoute: typeof rootRoute
     }
     '/sets/$setId': {
+      id: '/sets/$setId'
+      path: '/sets/$setId'
+      fullPath: '/sets/$setId'
       preLoaderRoute: typeof SetsSetIdImport
       parentRoute: typeof rootRoute
     }
     '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile'
       preLoaderRoute: typeof ProfileIndexImport
       parentRoute: typeof rootRoute
     }
@@ -123,9 +153,8 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
+export const routeTree = rootRoute.addChildren({
   IndexRoute,
-  AuthenticatedRoute,
   AboutRoute,
   RandomRoute,
   RandomHeroRoute,
@@ -134,6 +163,58 @@ export const routeTree = rootRoute.addChildren([
   CardsCardIdRoute,
   SetsSetIdRoute,
   ProfileIndexRoute,
-])
+})
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/_authenticated",
+        "/about",
+        "/random",
+        "/random-hero",
+        "/auth/login",
+        "/auth/signup",
+        "/cards/$cardId",
+        "/sets/$setId",
+        "/profile/"
+      ]
+    },
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx"
+    },
+    "/about": {
+      "filePath": "about.tsx"
+    },
+    "/random": {
+      "filePath": "random.tsx"
+    },
+    "/random-hero": {
+      "filePath": "random-hero.tsx"
+    },
+    "/auth/login": {
+      "filePath": "auth/login.tsx"
+    },
+    "/auth/signup": {
+      "filePath": "auth/signup.tsx"
+    },
+    "/cards/$cardId": {
+      "filePath": "cards/$cardId.tsx"
+    },
+    "/sets/$setId": {
+      "filePath": "sets/$setId.tsx"
+    },
+    "/profile/": {
+      "filePath": "profile/index.tsx"
+    }
+  }
+}
+ROUTE_MANIFEST_END */
