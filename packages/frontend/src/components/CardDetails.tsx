@@ -121,7 +121,7 @@ export default function CardDetails({
           <h1 className="text-3xl font-bold">{cardData?.cards.name}</h1>
           <Link
             to="/sets/$setId"
-            params={{ setId: cardData.card_printings.set_id }}
+            params={{ setId: cardData?.card_printings.set_id as string }}
             className="text-sm"
           >
             {cardData?.card_printings.set_id}
@@ -133,7 +133,9 @@ export default function CardDetails({
           src={cardData?.card_printings.image_url}
           alt={cardData?.cards.name}
         />
-        <AddToWishlist cardPrintingId={cardData.card_printings.unique_id} />
+        <AddToWishlist
+          cardPrintingId={cardData?.card_printings.unique_id as string}
+        />
       </div>
       <div className="col-span-2">
         <ReactMarkdown

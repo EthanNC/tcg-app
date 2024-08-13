@@ -26,6 +26,7 @@ const app = new Hono()
   .get("/:id", async (c) => {
     const id = c.req.param("id");
     const card = await byId(id);
+    if (!card) return c.json(null, 200);
     return c.json(card);
   });
 

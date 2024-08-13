@@ -11,7 +11,7 @@ const Schema = createSelectSchema(cards, {
 });
 
 export const byId = zod(Schema.shape.unique_id, async (unique_id) => {
-  const card = await db
+  const [card] = await db
     .select()
     .from(cards)
     .innerJoin(
@@ -20,7 +20,7 @@ export const byId = zod(Schema.shape.unique_id, async (unique_id) => {
     )
     .where(eq(cards.unique_id, unique_id))
     .execute();
-  return card[0];
+  return card;
 });
 
 export const getRandomCardId = async () => {
