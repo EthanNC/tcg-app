@@ -48,8 +48,8 @@ export const searchByName = zod(Schema.shape.name, async (name) => {
     .select({
       // Select only the columns we need
       name: cards.name,
-      unique_ids: sql`array_agg(${cards.unique_id})`.mapWith(Array<string>),
-      pitches: sql`array_agg(${cards.pitch})`.mapWith(Array<string>),
+      unique_ids: sql<string[]>`array_agg(${cards.unique_id})`,
+      pitches: sql<string[]>`array_agg(${cards.pitch})`,
     })
     .from(cards)
     .where(
