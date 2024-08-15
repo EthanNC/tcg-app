@@ -1,5 +1,5 @@
 import { GetCardResponse } from "@/lib/api/cards";
-import React from "react";
+import React, { useCallback } from "react";
 import AttackSymbol from "@/assets/img/symbols/symbol-attack.png";
 import DefenceSymbol from "@/assets/img/symbols/symbol-defence.png";
 import ResourceSymbol from "@/assets/img/symbols/symbol-resource.png";
@@ -60,14 +60,13 @@ const CustomNotation = ({ notation }: { notation: string }) => {
   }
 };
 
-const filterKeywordTextByName = (name: string) => {
-  return keywordData.find(
-    (keyword) => keyword.name.toLocaleLowerCase() === name
-  )?.description;
-};
-
 // Custom renderer for paragraphs
 const CustomParagraph: Components["p"] = ({ children }) => {
+  const handleKeywordFilter = useCallback((name: string) => {
+    return keywordData.find(
+      (keyword) => keyword.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+    )?.description;
+  }, []);
   return (
     <p>
       {React.Children.map(children, (child: React.ReactNode) => {
@@ -84,13 +83,14 @@ const CustomParagraph: Components["p"] = ({ children }) => {
         } else if (typeof child === "object" && child !== null) {
           // Check if the child is a Tooltip component
           const keyword = (child as React.ReactElement).props.children;
-          const popoverContent = filterKeywordTextByName(keyword);
+
+          const popoverContent = handleKeywordFilter(keyword);
           if (!popoverContent) return child;
+
           return (
             <Popover>
               <PopoverTrigger>{child}</PopoverTrigger>
               <PopoverContent className="w-80">
-                {" "}
                 <ReactMarkdown
                   className="prose prose-sm max-w-none"
                   components={{
