@@ -17,6 +17,14 @@ export const database = new sst.Linkable("Database", {
   },
 });
 
+export const storage = new sst.aws.Bucket("Cardfaces", {
+  public: true,
+});
+
+export const router = new sst.aws.Router("MyRouter", {
+  routes: { "/*": $interpolate`https://${storage.domain}` },
+});
+
 !$dev &&
   new docker.Container(
     "Data",
@@ -28,6 +36,7 @@ export const database = new sst.Linkable("Database", {
         "POSTGRES_NAME=postgres",
         $interpolate`POSTGRES_USER=postgres.${project.id}`,
         $interpolate`POSTGRES_PASSWORD=${project.databasePassword}`,
+        $interpolate`STORAGE_URL=${router.url}/images/`,
       ],
       volumes: [
         {
@@ -36,5 +45,5 @@ export const database = new sst.Linkable("Database", {
       ],
       networkMode: "host",
     },
-    { dependsOn: project }
+    { dependsOn: [project, router] }
   );

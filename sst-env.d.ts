@@ -8,6 +8,10 @@ declare module "sst" {
       type: "sst.aws.Function"
       url: string
     }
+    Cardfaces: {
+      name: string
+      type: "sst.aws.Bucket"
+    }
     Database: {
       database: string
       host: string
@@ -15,6 +19,10 @@ declare module "sst" {
       port: number
       type: "sst.sst.Linkable"
       user: string
+    }
+    MyRouter: {
+      type: "sst.aws.Router"
+      url: string
     }
     StaticSite: {
       type: "sst.aws.StaticSite"
