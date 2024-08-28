@@ -1,6 +1,6 @@
 import { hash, verify } from "@node-rs/argon2";
 import { lucia } from "@tcg-app/core/auth";
-import { byUsername, create } from "@tcg-app/core/user";
+import { User } from "@tcg-app/core/user";
 import { DatabaseError } from "@tcg-app/core/utils/http";
 import { Hono } from "hono";
 import { Context } from "src/lib/context";
@@ -61,9 +61,9 @@ const app = new Hono<Context>()
     const userId = randomUUID();
 
     try {
-      await create({
+      await User.create({
         id: userId,
-        email: `ethan-${userId}@example.com`,
+        email: `ethan-${userId}@example.com`, // TODO: Add email to signup
         username,
         passwordHash,
       });
@@ -145,7 +145,7 @@ const app = new Hono<Context>()
     }
 
     try {
-      const existingUser = await byUsername(username);
+      const existingUser = await User.byUsername(username);
 
       if (!existingUser) {
         return c.json(

@@ -2,7 +2,7 @@ import { it } from "vitest";
 import { ActorContext } from "../actor";
 
 import { randomUUID } from "node:crypto";
-import { create } from "../user";
+import { User } from "../user";
 import {
   cardData,
   printingsData,
@@ -19,7 +19,7 @@ export function withTestUser(name: string, cb: (id: string) => Promise<any>) {
   const id = randomUUID();
 
   return it(name, async () => {
-    const user = await create({
+    const user = await User.create({
       id: id,
       username: "test",
       email: "test@test.com",
@@ -45,7 +45,7 @@ export function withTestCard(
   cb: ({ userId, cardPrintingId }: TestCardProps) => Promise<any>
 ) {
   return it(name, async () => {
-    const user = await create({
+    const user = await User.create({
       id: randomUUID(),
       username: "test",
       email: "test@test.com",
@@ -53,6 +53,7 @@ export function withTestCard(
     });
 
     await example();
+
     return await cb({
       userId: user?.id as string,
       cardPrintingId: printingsData[0]?.unique_id as string,
