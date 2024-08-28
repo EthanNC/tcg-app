@@ -5,7 +5,7 @@ import { afterAll, afterEach, beforeEach, vi } from "vitest";
 import { migrate } from "drizzle-orm/pglite/migrator";
 
 const client = new PGlite();
-export const db = drizzle(client);
+const db = drizzle(client);
 
 vi.mock("postgres", () => ({ default: () => client }));
 vi.mock("drizzle-orm/postgres-js", () => ({ drizzle }));
@@ -25,5 +25,5 @@ afterEach(async () => {
 
 // Free up resources after all tests are done
 afterAll(async () => {
-  client.close();
+  await client.close();
 });

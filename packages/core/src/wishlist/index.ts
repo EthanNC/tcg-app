@@ -48,6 +48,7 @@ export const listById = zod(ListSchema.shape.id, async (id) => {
   const [list] = await db
     .select()
     .from(wishlists)
+    .leftJoin(wishlist_items, eq(wishlists.id, wishlist_items.wishlistId))
     .where(eq(wishlists.id, id))
     .execute();
   return list;
