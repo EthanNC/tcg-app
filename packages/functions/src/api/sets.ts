@@ -1,9 +1,9 @@
-import { all, byUniqueId, findByName } from "@tcg-app/core/sets";
+import { Sets } from "@tcg-app/core/sets";
 import { Hono } from "hono";
 
 const app = new Hono()
   .get("/", async (c) => {
-    const sets = await all([]);
+    const sets = await Sets.all([]);
     return c.json(sets);
   })
   .get("/:id", async (c) => {
@@ -16,9 +16,9 @@ const app = new Hono()
       let set;
       // Assuming 'id' with length 3 should use 'findByName'
       if (id.length === 3) {
-        set = await findByName(id);
+        set = await Sets.findByName(id);
       } else {
-        set = await byUniqueId(id);
+        set = await Sets.byUniqueId(id);
       }
 
       // Check if the set was found

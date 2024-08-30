@@ -1,12 +1,6 @@
 import { Hono } from "hono";
 import { Context } from "src/lib/context";
-import {
-  createItem,
-  createList,
-  createUserListIfNotExists,
-  deleteItem,
-  listsbyUserId,
-} from "@tcg-app/core/wishlist";
+import { Wishlists } from "@tcg-app/core/wishlist";
 import { randomUUID } from "node:crypto";
 
 const app = new Hono<Context>()
@@ -19,7 +13,7 @@ const app = new Hono<Context>()
   })
   .get("/", async (c) => {
     const user = c.get("user");
-    const lists = await listsbyUserId(user?.id!);
+    const lists = await Wishlists.byUserId(user?.id!);
     return c.json(lists);
   })
   .post("/", async (c) => {
@@ -39,7 +33,7 @@ const app = new Hono<Context>()
       createdAt: new Date(),
     };
 
-    const list = await createList(newList);
+    const list = await Wishlists.create(newList);
 
     return c.json(list);
   })
@@ -57,7 +51,7 @@ const app = new Hono<Context>()
         updatedAt: new Date(),
       };
 
-      const item = await createItem(addItem);
+      const item = await Wishlists.addItem(addItem);
       return c.json(item);
     }
 
@@ -68,7 +62,7 @@ const app = new Hono<Context>()
       name: "Default",
       createdAt: new Date(),
     };
-    const wishlist = await createUserListIfNotExists(defaultList);
+    const wishlist = await Wishlists.createIfNoneExistOnUser(defaultList);
 
     const addItem = {
       id: randomUUID(),
@@ -77,13 +71,13 @@ const app = new Hono<Context>()
       updatedAt: new Date(),
     };
 
-    const item = await createItem(addItem);
+    const item = await Wishlists.addItem(addItem);
 
     return c.json(item);
   })
   .post("/delete-item", async (c) => {
     const { itemId } = await c.req.json<{ itemId: string }>();
-    const item = await deleteItem(itemId);
+    const item = await Wishlists.deleteItem(itemId);
 
     return c.json(item);
   });
