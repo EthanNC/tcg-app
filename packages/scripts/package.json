@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
-    "@tcg-app/core": "*",
+    "@tcg-app/core": "workspace:",
     "bun": "^1.1.20"
   },
   "scripts": {

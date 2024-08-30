@@ -1,10 +1,8 @@
 {
   "name": "tcg-app",
   "version": "0.0.0",
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
+    "dev": "sst dev",
     "test": "NODE_ENV=test sst shell vitest"
   },
   "devDependencies": {
@@ -13,6 +11,7 @@
     "vitest": "^2.0.5"
   },
   "dependencies": {
-    "sst": "^3.0.13"
+    "sst": "^3.0.13",
+    "zod": "^3.23.8"
   }
 }
