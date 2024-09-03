@@ -1,11 +1,30 @@
 import { hash, verify } from "@node-rs/argon2";
 import { lucia } from "@tcg-app/core/auth";
 import { User } from "@tcg-app/core/user";
-import { DatabaseError } from "@tcg-app/core/utils/http";
 import { Hono } from "hono";
 import { Context } from "src/lib/context";
 import { randomUUID } from "node:crypto";
 import { StatusCode } from "hono/utils/http-status";
+import { z } from "zod";
+import { HTTPException } from "hono/http-exception";
+
+const LoginSchema = z.object({
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters long" })
+    .max(31, { message: "Username must be at most 31 characters long" })
+    .regex(/^[a-z0-9_-]+$/, {
+      message:
+        "Username can only contain lowercase letters, numbers, underscores, and hyphens",
+    }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long" })
+    .max(255, { message: "Password must be at most 255 characters long" }),
+});
+
+//Todo: add email to signup
+const SingupSchema = LoginSchema;
 
 const app = new Hono<Context>()
   .get("/me", async (c) => {
@@ -24,31 +43,9 @@ const app = new Hono<Context>()
       username: string;
       password: string;
     }>();
-
+    SingupSchema.parse(body);
     const username: string | null = body.username ?? null;
-    if (
-      !username ||
-      username.length < 3 ||
-      username.length > 31 ||
-      !/^[a-z0-9_-]+$/.test(username)
-    ) {
-      return c.json(
-        {
-          error: "Invalid username",
-        },
-        400
-      );
-    }
-
     const password: string | null = body.password ?? null;
-    if (!password || password.length < 6 || password.length > 255) {
-      return c.json(
-        {
-          error: "Invalid password",
-        },
-        400
-      );
-    }
 
     const passwordHash = await hash(password, {
       // recommended minimum parameters
@@ -81,35 +78,12 @@ const app = new Hono<Context>()
         201
       );
     } catch (error) {
-      if ((error as DatabaseError).type === "PostgresError") {
-        const dbError = error as DatabaseError;
-        let statusCode: StatusCode;
-        let errorMessage: string;
-
-        switch (dbError.code) {
-          case "23505":
-            statusCode = 409;
-            errorMessage = "User or Email Already Exists";
-            break;
-          case "23503":
-            statusCode = 409;
-            errorMessage = "Foreign key constraint violation";
-            break;
-          default:
-            statusCode = 500;
-            errorMessage = "Database error";
-        }
-
-        return c.json({ error: errorMessage }, statusCode);
-      } else {
-        console.error(error);
-        return c.json(
-          {
-            error: "Error signup",
-          },
-          500
-        );
-      }
+      return c.json(
+        {
+          message: "User already exists",
+        },
+        409
+      );
     }
   })
   .post("/login", async (c) => {
@@ -118,31 +92,10 @@ const app = new Hono<Context>()
       password: string;
     }>();
 
+    LoginSchema.parse(body);
+
     const username: string | null = body.username ?? null;
-
-    if (
-      !username ||
-      username.length < 3 ||
-      username.length > 31 ||
-      !/^[a-z0-9_-]+$/.test(username)
-    ) {
-      return c.json(
-        {
-          error: "Invalid username",
-        },
-        400
-      );
-    }
-
     const password: string | null = body.password ?? null;
-    if (!password || password.length < 6 || password.length > 255) {
-      return c.json(
-        {
-          error: "Invalid password",
-        },
-        400
-      );
-    }
 
     try {
       const existingUser = await User.byUsername(username);
@@ -150,7 +103,7 @@ const app = new Hono<Context>()
       if (!existingUser) {
         return c.json(
           {
-            error: "Invalid username or password",
+            message: "Invalid username or password",
           },
           400
         );
@@ -165,7 +118,7 @@ const app = new Hono<Context>()
       if (!validPassword) {
         return c.json(
           {
-            error: "Invalid username or password",
+            message: "Invalid username or password",
           },
           400
         );
@@ -187,7 +140,7 @@ const app = new Hono<Context>()
       console.error(error);
       return c.json(
         {
-          error: "Error login",
+          message: "Error login",
         },
         500
       );

@@ -3,7 +3,6 @@ import { db } from "../drizzle";
 import { users } from "./user.sql";
 import { createSelectSchema } from "drizzle-zod";
 import { zod } from "../utils/zod";
-import { executeDb } from "../utils/http";
 
 export module User {
   const Schema = createSelectSchema(users, {
@@ -34,15 +33,12 @@ export module User {
   export const create = zod(
     Schema.omit({ emailVerified: true }),
     async (newUser) => {
-      const [user] = await executeDb(
-        async () =>
-          await db
-            .insert(users)
-            .values({
-              ...newUser,
-            })
-            .returning()
-      );
+      const [user] = await db
+        .insert(users)
+        .values({
+          ...newUser,
+        })
+        .returning();
       return user;
     }
   );

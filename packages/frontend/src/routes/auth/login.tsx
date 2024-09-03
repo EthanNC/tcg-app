@@ -95,7 +95,7 @@ export default function Component() {
     },
     onError: (error) => {
       console.error(error);
-      setLoginError(error.error);
+      setLoginError(error.message);
     },
   });
 

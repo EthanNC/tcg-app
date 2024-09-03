@@ -145,9 +145,6 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.1)
-      zod:
-        specifier: ^3.23.8
-        version: 3.23.8
     devDependencies:
       '@tanstack/react-query-devtools':
         specifier: ^5.50.1

@@ -109,7 +109,7 @@ export default function Component() {
       }
     },
     onError: (error) => {
-      setServerError(error.error);
+      setServerError(error.message);
     },
   });
 
