@@ -1,5 +1,7 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
+import { readdirSync } from "fs";
+
 /**
  * ## AWS monorepo
  *
@@ -115,16 +117,18 @@ export default $config({
         "@sst-provider/supabase": {
           accessToken: process.env.SUPABASE_ACCESS_TOKEN,
         },
+        cloudflare: true,
         docker: true,
         random: true,
       },
     };
   },
   async run() {
-    const infra = await import("./infra/index.js");
-
-    return {
-      api: infra.api.url,
-    };
+    const outputs = {};
+    for (const value of readdirSync("./infra/")) {
+      const result = await import("./infra/" + value);
+      if (result.outputs) Object.assign(outputs, result.outputs);
+    }
+    return outputs;
   },
 });

@@ -9,4 +9,8 @@ export const web = new sst.aws.StaticSite("StaticSite", {
   environment: {
     VITE_API_URL: api.url,
   },
+  domain: {
+    name: "tcg.ethannc.dev",
+    dns: sst.cloudflare.dns(),
+  },
 });

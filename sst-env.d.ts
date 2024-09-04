@@ -20,6 +20,10 @@ declare module "sst" {
       "type": "sst.sst.Linkable"
       "user": string
     }
+    "Email": {
+      "sender": string
+      "type": "sst.aws.Email"
+    }
     "MyRouter": {
       "type": "sst.aws.Router"
       "url": string
