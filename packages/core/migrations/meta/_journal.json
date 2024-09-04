@@ -15,6 +15,13 @@
       "when": 1722439046246,
       "tag": "0001_white_mesmero",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1725470900680,
+      "tag": "0002_melodic_toxin",
+      "breakpoints": true
     }
   ]
 }
