@@ -1,6 +1,5 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-
 import { Resource } from "sst";
 
 export const client = postgres({
@@ -14,3 +13,5 @@ export const client = postgres({
 export const db = drizzle(client, {
   logger: process.env.NODE_ENV === "development",
 });
+
+export { migrate } from "drizzle-orm/postgres-js/migrator";

@@ -17,6 +17,37 @@ export const database = new sst.Linkable("Database", {
   },
 });
 
+const migrator = new sst.aws.Function(
+  "Migrator",
+  {
+    live: false,
+    // url: true,
+    handler: "packages/functions/src/migrator.handler",
+    link: [database],
+    timeout: "3 minutes",
+    copyFiles: [
+      {
+        from: "packages/core/migrations",
+        to: "migrations",
+      },
+    ],
+  },
+  { dependsOn: [database] }
+);
+
+//when I push to production, I want to run the migration
+if (!$dev) {
+  new aws.lambda.Invocation(
+    "Migrate",
+    {
+      functionName: migrator.nodes.function.name,
+      input: JSON.stringify({}),
+      triggers: { now: new Date().toISOString() },
+    },
+    { dependsOn: [migrator] }
+  );
+}
+
 export const storage = new sst.aws.Bucket("Cardfaces", {
   public: true,
 });

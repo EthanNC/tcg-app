@@ -24,6 +24,10 @@ declare module "sst" {
       "sender": string
       "type": "sst.aws.Email"
     }
+    "Migrator": {
+      "name": string
+      "type": "sst.aws.Function"
+    }
     "MyRouter": {
       "type": "sst.aws.Router"
       "url": string
