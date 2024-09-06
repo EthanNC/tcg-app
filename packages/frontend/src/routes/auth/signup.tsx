@@ -107,9 +107,11 @@ export default function Component() {
       if ("token" in data) {
         auth?.login(data.token, data.user.id);
       }
+      setIsSubmitting(false);
     },
     onError: (error) => {
       setServerError(error.message);
+      setIsSubmitting(false);
     },
   });
 
@@ -123,7 +125,6 @@ export default function Component() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     mutation.mutate(values);
-    setIsSubmitting(false);
   }
 
   return (

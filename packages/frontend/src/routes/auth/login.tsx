@@ -87,15 +87,16 @@ export default function Component() {
   >({
     mutationFn: (values) => loginUser(values.username, values.password),
     onSuccess: (data) => {
-      setIsSubmitting(false);
       setSubmitSuccess(true);
       if (hasSessionToken(data)) {
         auth?.login(data.token, data.user.id);
       }
+      setIsSubmitting(false);
     },
     onError: (error) => {
       console.error(error);
       setLoginError(error.message);
+      setIsSubmitting(false);
     },
   });
 
