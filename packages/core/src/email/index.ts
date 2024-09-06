@@ -1,5 +1,4 @@
 import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
-import { Resource } from "sst";
 import { db } from "../drizzle";
 import { zod } from "../utils/zod";
 import { z } from "zod";
@@ -18,33 +17,32 @@ export module Email {
     expiresAt: z.date(),
   });
 
-  export async function send(
-    from: string,
-    to: string,
-    subject: string,
-    body: string
-  ) {
-    console.log("sending email", subject, from, to);
-    await ses.send(
-      new SendEmailCommand({
-        Destination: {
-          ToAddresses: [to],
-        },
-        Content: {
-          Simple: {
-            Body: {
-              Text: {
-                Data: body,
+  export async function send(to: string, subject: string, body: string) {
+    console.log("sending email", subject, to);
+    try {
+      await ses.send(
+        new SendEmailCommand({
+          Destination: {
+            ToAddresses: [to],
+          },
+          Content: {
+            Simple: {
+              Body: {
+                Text: {
+                  Data: body,
+                },
+              },
+              Subject: {
+                Data: subject,
               },
             },
-            Subject: {
-              Data: subject,
-            },
           },
-        },
-        FromEmailAddress: `TCG-app <${Resource.Email.sender}>`,
-      })
-    );
+          FromEmailAddress: "tcg@ethannc.dev",
+        })
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   export const generateVerificationCode = zod(
@@ -66,6 +64,22 @@ export module Email {
         })
         .returning();
 
+      return verification;
+    }
+  );
+
+  export const checkCode = zod(
+    Schema.pick({ userId: true, code: true }),
+    async ({ code, userId }) => {
+      const userCodes = await db
+        .select()
+        .from(emailVerificationCode)
+        .where(eq(emailVerificationCode.userId, userId))
+        .execute();
+
+      const verification = userCodes.find(
+        (v) => v.code === code && v.expiresAt > new Date()
+      );
       return verification;
     }
   );

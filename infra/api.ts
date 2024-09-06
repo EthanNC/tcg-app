@@ -14,6 +14,12 @@ export const api = new sst.aws.Function("Api", {
     NODE_ENV: $dev ? "development" : "production",
   },
   handler: "./packages/functions/src/api/index.handler",
+  permissions: [
+    {
+      actions: ["ses:SendEmail"],
+      resources: ["*"],
+    },
+  ],
 });
 
 export const outputs = {

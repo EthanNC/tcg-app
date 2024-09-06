@@ -42,4 +42,14 @@ export module User {
       return user;
     }
   );
+
+  export const verifyEmail = zod(Schema.shape.id, async (id) => {
+    await db
+      .update(users)
+      .set({
+        emailVerified: new Date(),
+      })
+      .where(eq(users.id, id))
+      .execute();
+  });
 }

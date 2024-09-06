@@ -4,9 +4,8 @@ import { User } from "@tcg-app/core/user";
 import { Hono } from "hono";
 import { Context } from "src/lib/context";
 import { randomUUID } from "node:crypto";
-import { StatusCode } from "hono/utils/http-status";
+import { Email } from "@tcg-app/core/email";
 import { z } from "zod";
-import { HTTPException } from "hono/http-exception";
 
 const LoginSchema = z.object({
   username: z
@@ -41,32 +40,46 @@ const app = new Hono<Context>()
   .post("/signup", async (c) => {
     const body = await c.req.json<{
       username: string;
+      email: string;
       password: string;
     }>();
-    SingupSchema.parse(body);
-    const username: string | null = body.username ?? null;
-    const password: string | null = body.password ?? null;
-
-    const passwordHash = await hash(password, {
-      // recommended minimum parameters
-      memoryCost: 19456,
-      timeCost: 2,
-      outputLen: 32,
-      parallelism: 1,
-    });
-
-    const userId = randomUUID();
 
     try {
+      SingupSchema.parse(body);
+
+      const username: string | null = body.username ?? null;
+      const email: string | null = body.email ?? null;
+      const password: string | null = body.password ?? null;
+
+      const passwordHash = await hash(password, {
+        // recommended minimum parameters
+        memoryCost: 19456,
+        timeCost: 2,
+        outputLen: 32,
+        parallelism: 1,
+      });
+
+      const userId = randomUUID();
+
       await User.create({
         id: userId,
-        email: `ethan-${userId}@example.com`, // TODO: Add email to signup
+        email: email,
         username,
         passwordHash,
       });
 
+      const verification = await Email.generateVerificationCode({
+        userId,
+        email,
+      });
+
       const session = await lucia.createSession(userId, {});
       const token = session.id;
+      await Email.send(
+        email,
+        "Welcome to TCG App. Email verification",
+        `Please use the following code to verify your email: ${verification.code}`
+      );
       return c.json(
         {
           token,
@@ -92,12 +105,11 @@ const app = new Hono<Context>()
       password: string;
     }>();
 
-    LoginSchema.parse(body);
-
     const username: string | null = body.username ?? null;
     const password: string | null = body.password ?? null;
 
     try {
+      LoginSchema.parse(body);
       const existingUser = await User.byUsername(username);
 
       if (!existingUser) {
@@ -167,6 +179,32 @@ const app = new Hono<Context>()
       console.error("Logout error:", error);
       return c.json({ error: "An error occurred during logout" }, 500);
     }
+  })
+  .post("/verify-email", async (c) => {
+    const body = await c.req.json<{
+      code: string;
+    }>();
+
+    const user = c.get("user");
+    if (!user) {
+      return c.json({ error: "No user found" }, 404);
+    }
+
+    const code: string | null = body.code ?? null;
+
+    if (!code) {
+      return c.json({ error: "No code provided" }, 400);
+    }
+
+    const verification = await Email.checkCode({ code, userId: user?.id });
+
+    if (!verification) {
+      return c.json({ error: "Invalid code" }, 400);
+    }
+
+    await User.verifyEmail(verification.userId);
+
+    return c.json({ message: "Email verified" }, 200);
   });
 
 export default app;
