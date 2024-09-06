@@ -203,6 +203,9 @@ importers:
       '@node-rs/argon2':
         specifier: ^1.8.3
         version: 1.8.3
+      '@node-rs/argon2-linux-x64-gnu':
+        specifier: ^1.8.3
+        version: 1.8.3
       '@tcg-app/core':
         specifier: 'workspace:'
         version: link:../core
@@ -5658,8 +5661,7 @@ snapshots:
   '@node-rs/argon2-linux-x64-gnu@1.7.0':
     optional: true
 
-  '@node-rs/argon2-linux-x64-gnu@1.8.3':
-    optional: true
+  '@node-rs/argon2-linux-x64-gnu@1.8.3': {}
 
   '@node-rs/argon2-linux-x64-musl@1.7.0':
     optional: true

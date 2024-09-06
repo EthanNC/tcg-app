@@ -5,7 +5,10 @@ export const api = new sst.aws.Function("Api", {
   url: true,
   link: [email, database],
   nodejs: {
-    install: ["@node-rs/argon2"],
+    loader: {
+      ".node": "copy",
+    },
+    install: ["@node-rs/argon2", "@node-rs/argon2-linux-x64-gnu"],
   },
   environment: {
     NODE_ENV: $dev ? "development" : "production",
