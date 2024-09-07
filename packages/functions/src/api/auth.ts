@@ -23,7 +23,9 @@ const LoginSchema = z.object({
 });
 
 //Todo: add email to signup
-const SingupSchema = LoginSchema;
+const SingupSchema = LoginSchema.extend({
+  email: z.string().email(),
+});
 
 const app = new Hono<Context>()
   .get("/me", async (c) => {
@@ -35,6 +37,16 @@ const app = new Hono<Context>()
       //type inference is failing on client
       id: user.id as string,
       username: user.username as string,
+    });
+  })
+  .get("/is-verified", async (c) => {
+    const body = await c.req.json<{
+      id: string;
+    }>();
+    const user = await User.byId(body.id);
+    return c.json({
+      verified: !!user?.emailVerified,
+      date: user?.emailVerified,
     });
   })
   .post("/signup", async (c) => {

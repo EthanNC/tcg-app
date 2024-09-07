@@ -1,10 +1,11 @@
-import { eq } from "drizzle-orm";
+import { eq, getTableColumns } from "drizzle-orm";
 import { db } from "../drizzle";
 import { users } from "./user.sql";
 import { createSelectSchema } from "drizzle-zod";
 import { zod } from "../utils/zod";
 
 export module User {
+  const { passwordHash, ...rest } = getTableColumns(users);
   const Schema = createSelectSchema(users, {
     id: (z) => z.id.uuid(),
     username: (z) => z.username.min(3).max(31),
@@ -13,12 +14,12 @@ export module User {
   });
 
   export const byId = zod(Schema.shape.id, async (id) => {
-    const respone = await db
-      .select()
+    const [user] = await db
+      .select({ ...rest })
       .from(users)
       .where(eq(users.id, id))
       .execute();
-    return respone[0];
+    return user;
   });
 
   export const byUsername = zod(Schema.shape.username, async (username) => {
