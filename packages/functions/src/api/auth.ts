@@ -29,24 +29,15 @@ const SingupSchema = LoginSchema.extend({
 
 const app = new Hono<Context>()
   .get("/me", async (c) => {
-    const user = c.get("user");
-    if (!user) {
-      return c.json({ error: "No user found" }, 404);
+    const userCtx = c.get("user");
+    if (!userCtx) {
+      return c.json({ message: "No user found" }, 404);
     }
-    return c.json({
-      //type inference is failing on client
-      id: user.id as string,
-      username: user.username as string,
-    });
-  })
-  .get("/is-verified", async (c) => {
-    const body = await c.req.json<{
-      id: string;
-    }>();
-    const user = await User.byId(body.id);
+    const user = await User.byId(userCtx.id);
     return c.json({
       verified: !!user?.emailVerified,
       date: user?.emailVerified,
+      username: user?.username,
     });
   })
   .post("/signup", async (c) => {
@@ -199,24 +190,47 @@ const app = new Hono<Context>()
 
     const user = c.get("user");
     if (!user) {
-      return c.json({ error: "No user found" }, 404);
+      return c.json({ message: "No user found" }, 404);
     }
 
     const code: string | null = body.code ?? null;
 
     if (!code) {
-      return c.json({ error: "No code provided" }, 400);
+      return c.json({ message: "No code provided" }, 400);
     }
 
     const verification = await Email.checkCode({ code, userId: user?.id });
 
     if (!verification) {
-      return c.json({ error: "Invalid code" }, 400);
+      return c.json({ message: "Invalid code" }, 400);
     }
 
     await User.verifyEmail(verification.userId);
 
     return c.json({ message: "Email verified" }, 200);
+  })
+  .post("/resend-verification", async (c) => {
+    const userCtx = c.get("user");
+    if (!userCtx) {
+      return c.json({ message: "No user found" }, 404);
+    }
+
+    //TODO: i should be able to get the email from the user object
+    const user = await User.byId(userCtx.id);
+
+    const email = user.email;
+    const verification = await Email.generateVerificationCode({
+      userId: user.id,
+      email,
+    });
+
+    await Email.send(
+      email,
+      "Welcome to TCG App. Email verification",
+      `Please use the following code to verify your email: ${verification.code}`
+    );
+
+    return c.json({ message: "Verification code sent" }, 200);
   });
 
 export default app;

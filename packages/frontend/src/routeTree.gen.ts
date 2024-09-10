@@ -19,6 +19,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as ProfileIndexImport } from './routes/profile/index'
 import { Route as SetsSetIdImport } from './routes/sets/$setId'
 import { Route as CardsCardIdImport } from './routes/cards/$cardId'
+import { Route as AuthVerifyEmailImport } from './routes/auth/verify-email'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthLoginImport } from './routes/auth/login'
 
@@ -61,6 +62,11 @@ const SetsSetIdRoute = SetsSetIdImport.update({
 
 const CardsCardIdRoute = CardsCardIdImport.update({
   path: '/cards/$cardId',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthVerifyEmailRoute = AuthVerifyEmailImport.update({
+  path: '/auth/verify-email',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -127,6 +133,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof rootRoute
     }
+    '/auth/verify-email': {
+      id: '/auth/verify-email'
+      path: '/auth/verify-email'
+      fullPath: '/auth/verify-email'
+      preLoaderRoute: typeof AuthVerifyEmailImport
+      parentRoute: typeof rootRoute
+    }
     '/cards/$cardId': {
       id: '/cards/$cardId'
       path: '/cards/$cardId'
@@ -160,6 +173,7 @@ export const routeTree = rootRoute.addChildren({
   RandomHeroRoute,
   AuthLoginRoute,
   AuthSignupRoute,
+  AuthVerifyEmailRoute,
   CardsCardIdRoute,
   SetsSetIdRoute,
   ProfileIndexRoute,
@@ -180,6 +194,7 @@ export const routeTree = rootRoute.addChildren({
         "/random-hero",
         "/auth/login",
         "/auth/signup",
+        "/auth/verify-email",
         "/cards/$cardId",
         "/sets/$setId",
         "/profile/"
@@ -205,6 +220,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/auth/signup": {
       "filePath": "auth/signup.tsx"
+    },
+    "/auth/verify-email": {
+      "filePath": "auth/verify-email.tsx"
     },
     "/cards/$cardId": {
       "filePath": "cards/$cardId.tsx"

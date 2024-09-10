@@ -1,0 +1,112 @@
+import Container from "@/components/container";
+import { Button } from "@/components/ui/button";
+import { FormMessage } from "@/components/ui/form";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { useAuth } from "@/hooks/providers/auth";
+import { resendVerificationEmail, verifyEmail } from "@/lib/api/auth";
+import { useMutation } from "@tanstack/react-query";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useState } from "react";
+import { z } from "zod";
+
+export const Route = createFileRoute("/auth/verify-email")({
+  component: Component,
+});
+
+const Schema = z.object({
+  code: z.string().length(6),
+  token: z.string(),
+});
+
+type MutationValues = z.infer<typeof Schema>;
+
+export default function Component() {
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
+  const [resendStatus, setResendStatus] = useState("");
+  const auth = useAuth();
+  const router = useRouter();
+
+  const mutation = useMutation({
+    mutationFn: (values: MutationValues) =>
+      verifyEmail(values.code, values.token),
+
+    onSuccess: () => {
+      // Redirect to the profile page
+      router.history.push("/profile");
+    },
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
+
+  const resendMutation = useMutation({
+    mutationFn: (token: string) => resendVerificationEmail(token),
+    onSuccess: () => {
+      setResendStatus("Code resent successfully.");
+    },
+    onError: (error) => {
+      setError(error.message);
+    },
+  });
+
+  return (
+    <Container>
+      <h1 className="text-3xl">Verify Email</h1>
+      <p className="text-lg">
+        Please enter the verification code sent to your email address.
+      </p>
+      <FormMessage>{error}</FormMessage>
+      <br />
+      <InputOTP
+        maxLength={6}
+        value={value}
+        onChange={(value) => setValue(value)}
+      >
+        <InputOTPGroup>
+          <InputOTPSlot index={0} />
+          <InputOTPSlot index={1} />
+          <InputOTPSlot index={2} />
+        </InputOTPGroup>
+        <InputOTPSeparator />
+        <InputOTPGroup>
+          <InputOTPSlot index={3} />
+          <InputOTPSlot index={4} />
+          <InputOTPSlot index={5} />
+        </InputOTPGroup>
+      </InputOTP>
+
+      {/* resend code */}
+      <p>
+        Didn't receive the code?
+        <Button
+          onClick={() => resendMutation.mutate(auth?.user as string)}
+          className="my-2"
+          variant="link"
+          disabled={resendMutation.isPending}
+        >
+          Resend code
+        </Button>
+        <p>{resendStatus}</p>
+      </p>
+      <br />
+      <Button
+        disabled={value.length !== 6}
+        onClick={() =>
+          mutation.mutate({
+            code: value,
+            token: auth?.user as string,
+          })
+        }
+        type="submit"
+      >
+        Submit
+      </Button>
+    </Container>
+  );
+}

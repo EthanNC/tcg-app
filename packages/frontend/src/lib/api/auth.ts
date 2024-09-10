@@ -75,3 +75,36 @@ export async function getMe(token: string) {
   const data = await res.json();
   return data;
 }
+
+const verify = client.auth["verify-email"].$post;
+export type VerifyEmailResponseType = InferResponseType<typeof verify>;
+export type VerifyEmailResponseType200 = InferResponseType<typeof verify, 200>;
+export type VerifyEmailResponseType400 = InferResponseType<typeof verify, 400>;
+
+export async function verifyEmail(code: string, token: string) {
+  const res = await verify(
+    { json: { code } },
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  if (!res.ok) {
+    const error = await res.json();
+    throw error;
+  }
+  const data = await res.json();
+  return data;
+}
+
+const resendVerification = client.auth["resend-verification"].$post;
+
+export async function resendVerificationEmail(token: string) {
+  const res = await resendVerification(
+    {},
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  if (!res.ok) {
+    const error = await res.json();
+    throw error;
+  }
+  const data = await res.json();
+  return data;
+}
