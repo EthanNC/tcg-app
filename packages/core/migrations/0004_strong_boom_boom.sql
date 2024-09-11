@@ -1,0 +1,1 @@
+ALTER TABLE "password_reset_token" ALTER COLUMN "expires_at" SET NOT NULL;

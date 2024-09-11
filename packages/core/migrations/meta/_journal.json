@@ -22,6 +22,20 @@
       "when": 1725470900680,
       "tag": "0002_melodic_toxin",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1726081478795,
+      "tag": "0003_married_santa_claus",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1726082571854,
+      "tag": "0004_strong_boom_boom",
+      "breakpoints": true
     }
   ]
 }
