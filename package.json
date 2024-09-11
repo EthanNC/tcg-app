@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "sst dev",
-    "test": "NODE_ENV=test sst shell vitest"
+    "test": "NODE_ENV=test sst shell vitest",
+    "deploy": "sst deploy --stage production"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.4",

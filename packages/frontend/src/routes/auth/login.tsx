@@ -172,7 +172,7 @@ export default function Component() {
           </Form>
         </CardContent>
         <CardFooter className="flex justify-center">
-          <Button>Forgot password?</Button>
+          <Link to={"/auth/forgot-password"}>Forgot password?</Link>
         </CardFooter>
       </Card>
     </div>

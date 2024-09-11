@@ -22,6 +22,8 @@ import { Route as CardsCardIdImport } from './routes/cards/$cardId'
 import { Route as AuthVerifyEmailImport } from './routes/auth/verify-email'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as AuthForgotPasswordImport } from './routes/auth/forgot-password'
+import { Route as AuthResetPasswordCodeImport } from './routes/auth/reset-password/$code'
 
 // Create/Update Routes
 
@@ -80,6 +82,16 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthForgotPasswordRoute = AuthForgotPasswordImport.update({
+  path: '/auth/forgot-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthResetPasswordCodeRoute = AuthResetPasswordCodeImport.update({
+  path: '/auth/reset-password/$code',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -117,6 +129,13 @@ declare module '@tanstack/react-router' {
       path: '/random-hero'
       fullPath: '/random-hero'
       preLoaderRoute: typeof RandomHeroImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordImport
       parentRoute: typeof rootRoute
     }
     '/auth/login': {
@@ -161,6 +180,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileIndexImport
       parentRoute: typeof rootRoute
     }
+    '/auth/reset-password/$code': {
+      id: '/auth/reset-password/$code'
+      path: '/auth/reset-password/$code'
+      fullPath: '/auth/reset-password/$code'
+      preLoaderRoute: typeof AuthResetPasswordCodeImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -171,12 +197,14 @@ export const routeTree = rootRoute.addChildren({
   AboutRoute,
   RandomRoute,
   RandomHeroRoute,
+  AuthForgotPasswordRoute,
   AuthLoginRoute,
   AuthSignupRoute,
   AuthVerifyEmailRoute,
   CardsCardIdRoute,
   SetsSetIdRoute,
   ProfileIndexRoute,
+  AuthResetPasswordCodeRoute,
 })
 
 /* prettier-ignore-end */
@@ -192,12 +220,14 @@ export const routeTree = rootRoute.addChildren({
         "/about",
         "/random",
         "/random-hero",
+        "/auth/forgot-password",
         "/auth/login",
         "/auth/signup",
         "/auth/verify-email",
         "/cards/$cardId",
         "/sets/$setId",
-        "/profile/"
+        "/profile/",
+        "/auth/reset-password/$code"
       ]
     },
     "/": {
@@ -214,6 +244,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/random-hero": {
       "filePath": "random-hero.tsx"
+    },
+    "/auth/forgot-password": {
+      "filePath": "auth/forgot-password.tsx"
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"
@@ -232,6 +265,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/profile/": {
       "filePath": "profile/index.tsx"
+    },
+    "/auth/reset-password/$code": {
+      "filePath": "auth/reset-password/$code.tsx"
     }
   }
 }
