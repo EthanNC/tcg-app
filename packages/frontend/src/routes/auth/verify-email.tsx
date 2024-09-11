@@ -8,13 +8,19 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useAuth } from "@/hooks/providers/auth";
-import { resendVerificationEmail, verifyEmail } from "@/lib/api/auth";
-import { useMutation } from "@tanstack/react-query";
+import { getMe, resendVerificationEmail, verifyEmail } from "@/lib/api/auth";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { z } from "zod";
 
 export const Route = createFileRoute("/auth/verify-email")({
+  loader: ({ context: { queryClient, auth } }) => {
+    return queryClient.ensureQueryData({
+      queryKey: ["me"],
+      queryFn: async () => await getMe(auth!.user as string),
+    });
+  },
   component: Component,
 });
 
@@ -31,6 +37,20 @@ export default function Component() {
   const [resendStatus, setResendStatus] = useState("");
   const auth = useAuth();
   const router = useRouter();
+
+  const { data } = useQuery({
+    queryKey: ["me"],
+    queryFn: () => getMe(auth?.user as string),
+    enabled: !!auth?.user,
+  });
+
+  useLayoutEffect(() => {
+    if (data?.verified) {
+      // Redirect to the verify email page
+      router.history.push("/profile");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   const mutation = useMutation({
     mutationFn: (values: MutationValues) =>
