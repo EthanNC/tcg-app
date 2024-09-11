@@ -10,11 +10,18 @@ import {
 import { useAuth } from "@/hooks/providers/auth";
 import { getMe, resendVerificationEmail, verifyEmail } from "@/lib/api/auth";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useLayoutEffect, useState } from "react";
 import { z } from "zod";
 
 export const Route = createFileRoute("/auth/verify-email")({
+  beforeLoad: ({ context }) => {
+    if (!context.auth?.isAuthenticated) {
+      throw redirect({
+        to: "/",
+      });
+    }
+  },
   loader: ({ context: { queryClient, auth } }) => {
     return queryClient.ensureQueryData({
       queryKey: ["me"],
