@@ -27,6 +27,16 @@ const SingupSchema = LoginSchema.extend({
   email: z.string().email(),
 });
 
+const ResetPasswordSchema = z.object({
+  password: z
+    .string()
+    .min(6, {
+      message: "Password must be at least 6 characters.",
+    })
+    .max(255, { message: "Password must be less than 256 characters." }),
+  code: z.string().uuid(),
+});
+
 const app = new Hono<Context>()
   .get("/me", async (c) => {
     const userCtx = c.get("user");
@@ -231,6 +241,72 @@ const app = new Hono<Context>()
     );
 
     return c.json({ message: "Verification code sent" }, 200);
-  });
+  })
+  .post("/forgot-password", async (c) => {
+    const body = await c.req.json<{
+      email: string;
+    }>();
 
+    try {
+      z.string().email().parse(body.email);
+      const user = await User.byEmail(body.email);
+
+      const token = await User.createResetToken(user.id);
+      await Email.send(
+        body.email,
+        "Reset password for TCG App Account",
+        `Please use the following link to reset your password: ${process.env.NODE_ENV === "development" ? "http://localhost:5173" : "https://tcg.ethannc.dev"}/auth/reset-password/${token.id}`
+      );
+
+      return c.json({ message: "Verification code sent" }, 200);
+    } catch (error) {
+      return c.json({ message: "Invalid email" }, 400);
+    }
+  })
+  .get("/reset-password/:code", async (c) => {
+    const code = c.req.param("code");
+    try {
+      z.string().uuid().parse(code);
+      const resetToken = await User.findResetToken(code);
+
+      if (resetToken.expiresAt < new Date()) {
+        return c.json({ message: "Token Expired" }, 400);
+      }
+      return c.json({ message: "Valid token" }, 200);
+    } catch (error) {
+      return c.json({ message: "Invalid token" }, 400);
+    }
+  })
+  .post("/reset-password", async (c) => {
+    const body = await c.req.json<{
+      code: string;
+      password: string;
+    }>();
+
+    const code: string | null = body.code ?? null;
+    const password: string | null = body.password ?? null;
+
+    try {
+      ResetPasswordSchema.parse(body);
+
+      const token = await User.findResetToken(code);
+
+      const passwordHash = await hash(password, {
+        // recommended minimum parameters
+        memoryCost: 19456,
+        timeCost: 2,
+        outputLen: 32,
+        parallelism: 1,
+      });
+
+      await User.updatePassword({
+        id: token.userId,
+        passwordHash,
+      });
+
+      return c.json({ message: "Password reset" }, 200);
+    } catch (error) {
+      return c.json({ message: "Invalid token" }, 400);
+    }
+  });
 export default app;

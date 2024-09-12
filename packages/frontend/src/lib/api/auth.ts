@@ -108,3 +108,47 @@ export async function resendVerificationEmail(token: string) {
   const data = await res.json();
   return data;
 }
+
+export async function verifyResetCode(code: string) {
+  const res = await client.auth["reset-password"][":code"].$get({
+    param: { code },
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw error;
+  }
+  const data = await res.json();
+  return data;
+}
+
+const forgotPassword = client.auth["forgot-password"].$post;
+
+export async function forgotPasswordEmail(email: string) {
+  const res = await forgotPassword({
+    json: { email },
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw error;
+  }
+  const data = await res.json();
+  return data;
+}
+
+const reset = client.auth["reset-password"].$post;
+export type ResetPasswordResponseType = InferResponseType<typeof reset>;
+export type ResetPasswordResponseType200 = InferResponseType<typeof reset, 200>;
+export type ResetPasswordResponseType400 = InferResponseType<typeof reset, 400>;
+export async function resetPassword(password: string, code: string) {
+  const res = await reset({
+    json: { password, code },
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw error;
+  }
+
+  const data = await res.json();
+  return data;
+}

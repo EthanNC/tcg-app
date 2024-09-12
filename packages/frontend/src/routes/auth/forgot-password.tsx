@@ -7,6 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { forgotPasswordEmail } from "@/lib/api/auth";
+import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
@@ -22,6 +24,12 @@ const Schema = z.object({
 export default function Component() {
   const [value, setValue] = useState("");
   const [error, setError] = useState("");
+
+  const mutation = useMutation({
+    mutationFn: async (values: { email: string }) => {
+      await forgotPasswordEmail(values.email);
+    },
+  });
 
   return (
     <Container>
@@ -48,7 +56,7 @@ export default function Component() {
                 try {
                   setError("");
                   const { email } = Schema.parse({ email: value });
-                  console.log(email);
+                  mutation.mutate({ email });
                   // Call the API to send the email
                 } catch (error) {
                   if (error instanceof z.ZodError) {

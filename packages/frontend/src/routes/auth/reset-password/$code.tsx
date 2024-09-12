@@ -1,4 +1,5 @@
 import Container from "@/components/container";
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import {
@@ -10,14 +11,43 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  resetPassword,
+  ResetPasswordResponseType,
+  ResetPasswordResponseType400,
+  verifyResetCode,
+} from "@/lib/api/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createFileRoute } from "@tanstack/react-router";
+import { useMutation } from "@tanstack/react-query";
+import {
+  createFileRoute,
+  Link,
+  notFound,
+  useParams,
+  useRouter,
+} from "@tanstack/react-router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export const Route = createFileRoute("/auth/reset-password/$code")({
+  loader: async ({ params }) => {
+    try {
+      await verifyResetCode(params.code);
+    } catch (error) {
+      throw notFound();
+    }
+  },
+  pendingComponent: Spinner,
   component: Component,
-  notFoundComponent: () => <div>Not found</div>,
+  notFoundComponent: () => (
+    <Container>
+      Not found
+      <Link className="hover:underline" to="/auth/forgot-password">
+        Forgot your password?
+      </Link>
+    </Container>
+  ),
 });
 
 const Schema = z
@@ -38,6 +68,9 @@ const Schema = z
 type ResetPasswordFormValues = z.infer<typeof Schema>;
 
 export default function Component() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState("");
+
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(Schema),
     defaultValues: {
@@ -45,11 +78,32 @@ export default function Component() {
       confirmPassword: "",
     },
   });
+  const router = useRouter();
+  const code = useParams({
+    from: "/auth/reset-password/$code",
+    select: (params) => params.code,
+  });
+
+  const mutation = useMutation<
+    ResetPasswordResponseType,
+    ResetPasswordResponseType400,
+    ResetPasswordFormValues
+  >({
+    mutationFn: async (values) => await resetPassword(values.newPassword, code),
+    // await forgotPasswordEmail(values
+    onSuccess: () => {
+      // Redirect to the profile page
+      router.history.push("/auth/login");
+    },
+    onError: (error) => {
+      setIsSubmitting(false);
+      setServerError(error.message);
+    },
+  });
 
   function onSubmit(values: ResetPasswordFormValues) {
-    // setIsSubmitting(true);
-    // mutation.mutate(values);
-    console.log(values);
+    setIsSubmitting(true);
+    mutation.mutate(values);
   }
 
   return (
@@ -58,6 +112,7 @@ export default function Component() {
         <CardTitle className="p-2">Reset Password</CardTitle>
         <CardContent>
           <Form {...form}>
+            {serverError && <FormMessage>{serverError}</FormMessage>}
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
@@ -94,11 +149,7 @@ export default function Component() {
                 )}
               />
 
-              <Button
-                className="mt-4"
-                type="submit"
-                disabled={form.formState.isSubmitting}
-              >
+              <Button className="mt-4" type="submit" disabled={isSubmitting}>
                 {form.formState.isSubmitting
                   ? "Resetting password..."
                   : "Reset"}
