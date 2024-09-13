@@ -42,10 +42,10 @@ export default function AddToWishlist({ cardPrintingId }: AddToWishlistProps) {
   const addItemsMutation = useMutation<
     AddItemResponseType,
     AddItemResponseType200,
-    { token: string; cardId: string; listId: string }
+    { token: string; cardId: string; listId?: string }
   >({
     mutationFn: (values) =>
-      addCardToList(values.token, values.cardId, values.listId),
+      addCardToList(values.token, values.cardId, values.listId as string),
     onSuccess: () => {
       refetchList();
     },
@@ -76,26 +76,42 @@ export default function AddToWishlist({ cardPrintingId }: AddToWishlistProps) {
           </Tooltip>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-48">
-          <DropdownMenuLabel>Select List</DropdownMenuLabel>
-          {listsData?.map((list) => (
+          {listsData?.length === 0 && (
             <DropdownMenuItem
               onClick={() =>
                 addItemsMutation.mutate({
                   token: auth!.user!,
                   cardId: cardPrintingId,
-                  listId: list.id,
+                  listId: undefined,
                 })
               }
-              key={list.id}
-              disabled={isCardInList(list)}
             >
-              {list.name}
+              Add to Default List
             </DropdownMenuItem>
+          )}
+          {listsData?.map((list) => (
+            <>
+              <DropdownMenuLabel>Select List</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() =>
+                  addItemsMutation.mutate({
+                    token: auth!.user!,
+                    cardId: cardPrintingId,
+                    listId: list.id,
+                  })
+                }
+                key={list.id}
+                disabled={isCardInList(list)}
+              >
+                {list.name}
+              </DropdownMenuItem>
+            </>
           ))}
+
           <DropdownMenuSeparator />
           <DropdownMenuItem>
             <Button variant="link" asChild>
-              <Link to="/profile">Go to Wishlist</Link>
+              <Link to="/profile">Create a new list</Link>
             </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
